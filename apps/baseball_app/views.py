@@ -113,7 +113,7 @@ def swing(request):
 
         hit = ['single', 'double', 'triple', 'Home Run!', 'ground out', 'fly out', 'foul ball', 'hit by pitch']
         x = random.randint(0,7)
-        this_hit = hit[3]
+        this_hit = hit[0]
         print this_hit
         i = request.session['curr_inn']
         print "THE CURRENT INNING IS: " + str(i)
@@ -132,6 +132,7 @@ def swing(request):
                     request.session['first'] = False
             activities = request.session['activities']
             activities.insert(0, this_hit)
+            return redirect('/')
 
         if this_hit == 'double':
             if request.session['first']:
@@ -150,6 +151,7 @@ def swing(request):
             request.session['second'] = True
             activities = request.session['activities'] 
             activities.insert(0, this_hit)
+            return redirect('/')
 
         if this_hit == 'triple':
             if request.session['first']:
@@ -208,6 +210,11 @@ def swing(request):
                 request.session['third'] = False
             
             request.session['box_score'][i] += 1
+            if request.session['curr_inn'] % 2 == 0:
+                    request.session['visitor_score'] += 1
+            else:
+                request.session['home_score'] += 1
+                request.session['first'] = False
             request.session['ball'] = 0
             request.session['strike'] = 0
 
