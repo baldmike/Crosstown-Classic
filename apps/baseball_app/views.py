@@ -63,7 +63,7 @@ def index(request):
 def watch(request):
     i = request.session['curr_inn']
     rand = random.randint(1,100)
-    if rand <= 10:
+    if rand <= 60:
         request.session['strike'] += 1
         activities = request.session['activities'] 
         activities.insert(0, "STRIKE " + str(request.session['strike']))
@@ -78,7 +78,7 @@ def watch(request):
                 activities.insert(0, "*****  INNING'S OVER! ***** ")
                 end_of_inning(request)
         return redirect('/')
-    else:
+    elif rand > 60 and rand < 95:
         request.session['ball'] += 1
         activities = request.session['activities'] 
         activities.insert(0, "BALL " + str(request.session['ball']))
@@ -98,25 +98,80 @@ def watch(request):
                 request.session['second'] = True
             request.session['first'] = True
         return redirect('/')
+    else:
+        activities = request.session['activities'] 
+        activities.insert(0, "HIT BY PITCH, take your base")
+        request.session['ball'] = 0
+        request.session['strike'] = 0
+        if request.session['third'] and request.session['second'] and request.session['third']:
+            request.session['box_score'][i] += 1
+            if request.session['curr_inn'] % 2 == 0:
+                request.session['visitor_score'] += 1
+            return redirect('/')
+        if request.session['second'] and request.session['first']:
+            request.session['third'] = True
+        if request.session['first']:
+            request.session['second'] = True
+        request.session['first'] = True
+        return redirect('/')
+
 
 def swing(request):
     rand = random.randint(0,100)
-    if rand < 20:
+    if rand < 21:
         request.session['strike'] += 1
+        activities = request.session['activities'] 
+        activities.insert(0, "STRIKE " + str(request.session['strike']) + "!")
         if request.session['strike'] == 3:
-            print "STRIKE OUT SWINGING!"
+            activities = request.session['activities'] 
+            activities.insert(0, "STRIKE OUT SWINGING!")
             request.session['out'] += 1
             request.session['strike'] = 0
             request.session['ball'] = 0
+            if request.session['out'] == 3:
+                end_of_inning(request)
         return redirect('/')
-    else:
-
-        hit = ['single', 'double', 'triple', 'Home Run!', 'ground out', 'fly out', 'foul ball', 'hit by pitch']
+    elif rand > 20 and rand < 71:
+        hit = ['ground out', 'fly out', 'line out', 'foul ball', 'foul ball', 'foul ball', 'foul ball', 'foul ball']
         x = random.randint(0,7)
-        this_hit = hit[0]
+        this_hit = hit[x]
         print this_hit
         i = request.session['curr_inn']
-        print "THE CURRENT INNING IS: " + str(i)
+
+        if this_hit == 'fly out':
+            request.session['out'] += 1
+            if request.session['out'] == 3:
+                end_of_inning(request)
+            print request.session['out']
+            if request.session['third']:
+                request.session['box_score'][i] += 1
+            
+            activities = request.session['activities'] 
+            activities.insert(0, this_hit)
+            return redirect('/')
+
+        if this_hit == 'ground out':
+            activities = request.session['activities'] 
+            activities.insert(0, this_hit)
+            request.session['out'] += 1
+            if request.session['out'] == 3:
+                end_of_inning(request)
+            print "OUT: " + str(request.session['out'])
+            if request.session['third']:
+                if request.session['out'] < 3:
+                    request.session['box_score'][i] += 1
+            return redirect('/')
+
+    elif rand > 70 and rand < 90:
+        hit = ['single', 'double', 'line out', 'foul ball', 'foul ball', 'foul ball', 'foul ball', 'foul ball']
+        x = random.randint(0,7)
+<<<<<<< HEAD
+        this_hit = hit[0]
+=======
+        this_hit = hit[x]
+>>>>>>> b2a0d5d4106a0f0cc89502895ea0dd2738dc2a44
+        print this_hit
+        i = request.session['curr_inn']
 
         if this_hit == 'single':
             request.session['first'] = True
@@ -228,30 +283,6 @@ def swing(request):
             activities.insert(0, this_hit)
             return redirect('/')
 
-        if this_hit == 'fly out':
-            request.session['out'] += 1
-            if request.session['out'] == 3:
-                end_of_inning(request)
-            print request.session['out']
-            if request.session['third']:
-                request.session['box_score'][i] += 1
-            
-            activities = request.session['activities'] 
-            activities.insert(0, this_hit)
-            return redirect('/')
-
-        if this_hit == 'ground out':
-            activities = request.session['activities'] 
-            activities.insert(0, this_hit)
-            request.session['out'] += 1
-            if request.session['out'] == 3:
-                end_of_inning(request)
-            print "OUT: " + str(request.session['out'])
-            if request.session['third']:
-                if request.session['out'] < 3:
-                    request.session['box_score'][i] += 1
-            return redirect('/')
-
         if this_hit == 'hit by pitch':
             activities = request.session['activities'] 
             activities.insert(0, this_hit)
@@ -273,6 +304,8 @@ def swing(request):
 
 
 def end_of_inning(request):
+    activities = request.session['activities'] 
+    activities.insert(0, "*******************END OF INNING************************")
     request.session['ball'] = 0
     request.session['strike'] = 0
     request.session['out'] = 0
@@ -282,6 +315,7 @@ def end_of_inning(request):
     request.session['third'] = False
 
     request.session['curr_inn'] += 1
+
     return redirect('/')
 
 
