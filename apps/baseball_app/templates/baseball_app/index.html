@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name='viewport' content="width=device-width initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'baseball_app/css/styles.css' %}" media="screen" title="Baseball" charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"                     integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="{% static 'baseball_app/baseball_js.js' %}"></script>
+</head>
+
+<body>
+    <div class="container">
+        
+        <div class="row">
+            <div class="col-md-12">
+                <div class="jumbotron main">
+                        <img style = "border: 1px solid black; border-radius: 40px;" src= "{% static 'sox_scoreboard.jpg' %}" width = 50%>
+                    
+                </div>
+           </div>
+        </div>
+        <div class = "row">
+            <div class="col-xs-12 inning_box">
+                <div class = "col-xs-4">
+                    <h3 class = headline>Cubs: {{request.session.visitor_score}}   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   </h3>
+                </div>
+                
+                <div class = "col-xs-4">
+                    <h3>{{request.session.inning}}   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   </h3>
+                </div>
+
+                <div class = "col-xs-4">
+                    <h3 class = headline>White Sox: {{request.session.home_score}}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="scoreboard">
+                <table class="col-xs-12 table-bordered">
+                    
+                    <thead>
+                        <tr>
+                            <th> </th>
+                            <th> 1</th>
+                            <th> 2</th>
+                            <th> 3</th>
+                            <th> 4</th>
+                            <th> 5</th>
+                            <th> 6</th>
+                            <th> 7</th>
+                            <th> 8</th>
+                            <th> 9</th>
+                            <th> Score </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Cubs</td>
+                            <td {% if request.session.curr_inn == 0 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.0}}</td>
+                            <td {% if request.session.curr_inn == 2 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.2}}</td>
+                            <td {% if request.session.curr_inn == 4 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.4}}</td>
+                            <td {% if request.session.curr_inn == 6 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.6}}</td>
+                            <td {% if request.session.curr_inn == 8 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.8}}</td>
+                            <td {% if request.session.curr_inn == 10 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.10}}</td>
+                            <td {% if request.session.curr_inn == 12 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.12}}</td>
+                            <td {% if request.session.curr_inn == 14 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.14}}</td>
+                            <td {% if request.session.curr_inn == 16 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.16}}</td>
+                              
+                            <td> {{ request.session.visitor_score }}</td>
+                        </tr>
+                        <tr>
+                            <td>Sox</td>
+                            <td {% if request.session.curr_inn == 1 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.1}}</td>
+                            <td {% if request.session.curr_inn == 3 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.3}}</td>
+                            <td {% if request.session.curr_inn == 5 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.5}}</td>
+                            <td {% if request.session.curr_inn == 7 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.7}}</td>
+                            <td {% if request.session.curr_inn == 9 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.9}}</td>
+                            <td {% if request.session.curr_inn == 11 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.11}}</td>
+                            <td {% if request.session.curr_inn == 13 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.13}}</td>
+                            <td {% if request.session.curr_inn == 15 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.15}}</td>
+                            <td {% if request.session.curr_inn == 17 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.17}}</td>
+                        
+                            <td> {{ request.session.home_score }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            
+            <div class="row">
+                <div class="col-xs-6 at_bat">
+                    <form action="/swing" method="post">
+                        {% csrf_token %}
+                        <input type="submit" value=" Swing " name = "swing" class="button">
+                    </form>
+                </div>
+            
+                <div class="col-xs-6 at_bat">
+                    <form action="watch" method="post">
+                        {% csrf_token %}
+                        <input type="submit" value=" Watch " name = "watch" class="button">
+                    </form>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class = "col-xs-6">
+                    <h4>Ball: {{request.session.ball}}</h4>
+                    <h4>Strike: {{request.session.strike}}</h4>
+                    <h4>Out: {{request.session.out}}</h4>
+
+                </div>
+                <div class = "col-xs-6">
+                        <h4>Runner on 1st = {{request.session.first}}</h4>
+                        <h4>Runner on 2nd = {{request.session.second}}</h4>
+                        <h4>Runner on 3rd = {{request.session.third}}</h4>
+                </div>
+            </div>
+            <div class="row">
+                {% for activity in request.session.activities %}
+                <p>{{activity}}<p>
+                    {% endfor %}
+            </div>
+            <form action="/reset" method="post">
+                {% csrf_token %}
+                <input type="submit" value=" RESET " name = "reset" class="button">
+            </form>
+
+        </div>
+    </div>
+</body>
+
+</html>
