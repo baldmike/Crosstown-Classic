@@ -43,15 +43,13 @@ th {
 }
 
 .inning_box {
-    height: 60px;
     margin: 10px;
+    margin-left: 0px;
     border: 1px solid black;
     border-radius: 20px;
     background: black;
     font-size: 40px;
     color: white;
-    display: inline;
-    width: 100%;
 }
 
 h3 {

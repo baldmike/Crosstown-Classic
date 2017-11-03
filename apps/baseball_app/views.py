@@ -74,7 +74,11 @@ def index(request):
     print"BOX SCORE OF ZERO: " + str(request.session['box_score'][0])
     print "CURRENT INNING: " + str(request.session['curr_inn'])
 
-    return render(request, 'baseball_app/index.html')
+    context = {
+        'inning': range(1,10)
+    }
+
+    return render(request, 'baseball_app/index.html', context)
 
 
 def watch(request):
@@ -337,7 +341,8 @@ def swing(request):
             return redirect('/')
 
 
-
+# def advance_runners(request):
+    
 
 def end_of_inning(request):
     if request.session['curr_inn'] == 17:

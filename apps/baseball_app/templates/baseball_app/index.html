@@ -12,25 +12,24 @@
 </head>
 
 <body>
-    <div class="container-fluid">
+    <div class="container">
         
         <div class="row">
-            <div class="col-md-12">
-                <div class = "row">
-                    <div class="col-xs-12 inning_box">
-                        <div class = "col-xs-4">
-                            <h3 class = headline>Cubs: {{request.session.visitor_score}}   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   </h3>
-                        </div>
-                        
-                        <div class = "col-xs-4">
-                            <h3>{{request.session.inning}}   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   </h3>
-                        </div>
-        
-                        <div class = "col-xs-4">
-                            <h3 class = headline>White Sox: {{request.session.home_score}}</h3>
-                        </div>
-                    </div>
+            <div class="col-xs-12 inning_box">
+                <div class = "col-xs-4">
+                    <h3 class = headline>Cubs: {{request.session.visitor_score}}   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   </h3>
                 </div>
+                
+                <div class = "col-xs-4">
+                    <h3>{{request.session.inning}}   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   </h3>
+                </div>
+
+                <div class = "col-xs-4">
+                    <h3 class = headline>White Sox: {{request.session.home_score}}</h3>
+                </div>
+            </div>
+        </div>
+            
                 <div class="jumbotron main">
                         <img {% if request.session.first == False and request.session.second == False and request.session.third == False %} style = "border: 1px solid black; border-radius: 40px;" src= "{% static 'images/baseball_diamond.jpeg' %}" width = 50% {% endif %}>
                         <img {% if request.session.first and request.session.second == False and request.session.third == False %} style = "border: 1px solid black; border-radius: 40px;" src= "{% static 'images/baseball_diamond_first.jpeg' %}" width = 50% {% endif %}>
@@ -73,15 +72,9 @@
                     <thead>
                         <tr>
                             <th> </th>
-                            <th> 1</th>
-                            <th> 2</th>
-                            <th> 3</th>
-                            <th> 4</th>
-                            <th> 5</th>
-                            <th> 6</th>
-                            <th> 7</th>
-                            <th> 8</th>
-                            <th> 9</th>
+                            {% for i in inning %}
+                            <th> {{i}} </th>
+                            {% endfor %}
                             <th> Score </th>
                         </tr>
                     </thead>
