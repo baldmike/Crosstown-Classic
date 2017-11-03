@@ -25,6 +25,7 @@ background-image: linear-gradient(to bottom, darkgray, white);
 
 table {
     font-size: 20px;
+    border: 2px black solid;
 }
 
 th {
@@ -53,4 +54,40 @@ th {
 
 h3 {
     display: inline;
+}
+
+.outcome {
+    font-size: 40px;
+    font-weight: bold;
+}
+
+
+.diamond {
+	width: 0;
+	height: 0;
+	border: 50px solid transparent;
+	border-bottom-color: red;
+	position: relative;
+	top: -50px;
+}
+.diamond:after {
+	content: '';
+	position: absolute;
+	left: -50px;
+	top: 50px;
+	width: 0;
+	height: 0;
+	border: 50px solid transparent;
+	border-top-color: red;
+}
+
+.box {
+    height: 120px;
+    border: 1px black solid;
+    border-radius: 5px;
+}
+
+.big_box {
+    margin-top: 80px;
+    border: 2px black solid;
 }

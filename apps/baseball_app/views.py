@@ -9,8 +9,8 @@ from models import *
 
 def index(request):
 
-    if 'activities' not in request.session:
-        request.session['activities'] = []
+    if 'at_bat' not in request.session:
+        request.session['at_bat'] = []
     if 'curr_inn' not in request.session:
         request.session['curr_inn'] = 0
     if 'inning' not in request.session:
@@ -29,6 +29,26 @@ def index(request):
         request.session['inning'] = "Top of the fourth"
     if request.session['curr_inn'] == 7:
         request.session['inning'] = "Bottom of the fourth"
+    if request.session['curr_inn'] == 8:
+        request.session['inning'] = "Top of the fifth"
+    if request.session['curr_inn'] == 9:
+        request.session['inning'] = "Bottom of the fifth"
+    if request.session['curr_inn'] == 10:
+        request.session['inning'] = "Top of the sixth"
+    if request.session['curr_inn'] == 11:
+        request.session['inning'] = "Bottom of the sixth"
+    if request.session['curr_inn'] == 12:
+        request.session['inning'] = "Top of the seventh"
+    if request.session['curr_inn'] == 13:
+        request.session['inning'] = "Bottom of the seventh"
+    if request.session['curr_inn'] == 14:
+        request.session['inning'] = "Top of the eighth"
+    if request.session['curr_inn'] == 15:
+        request.session['inning'] = "Bottom of the eighth"
+    if request.session['curr_inn'] == 16:
+        request.session['inning'] = "Top of the ninth"
+    if request.session['curr_inn'] == 17:
+        request.session['inning'] = "Bottom of the ninth"
 
 
 
@@ -63,30 +83,29 @@ def index(request):
 def watch(request):
     i = request.session['curr_inn']
     rand = random.randint(1,100)
-    if rand <= 60:
+    if rand <= 2:
         request.session['strike'] += 1
-        activities = request.session['activities'] 
-        activities.insert(0, "STRIKE " + str(request.session['strike']))
+        at_bat = request.session['at_bat'] 
+        at_bat.insert(0, "STRIKE " + str(request.session['strike']))
         if request.session['strike'] == 3:
-            activities = request.session['activities'] 
-            activities.insert(0, "***** STRIKE OUT!! *****")
+            at_bat = request.session['at_bat'] 
+            at_bat.insert(0, "***** STRIKE OUT!! *****")
             request.session['strike'] = 0
             request.session['ball'] = 0
             request.session['out'] += 1
             if request.session['out'] == 3:
-                activities = request.session['activities'] 
-                activities.insert(0, "*****  INNING'S OVER! ***** ")
+                at_bat = request.session['at_bat']
                 end_of_inning(request)
         return redirect('/')
     elif rand > 60 and rand < 95:
         request.session['ball'] += 1
-        activities = request.session['activities'] 
-        activities.insert(0, "BALL " + str(request.session['ball']))
+        at_bat = request.session['at_bat'] 
+        at_bat.insert(0, "BALL " + str(request.session['ball']))
         if request.session['ball'] == 4:
             request.session['ball'] = 0
             request.session['strike'] = 0
-            activities = request.session['activities'] 
-            activities.insert(0, "*****  Ball Four, Take your base. ***** ")
+            at_bat = request.session['at_bat'] 
+            at_bat.insert(0, "*****  Ball Four, Take your base. ***** ")
             if request.session['third'] and request.session['second'] and request.session['third']:
                 request.session['box_score'][i] += 1
                 if request.session['curr_inn'] % 2 == 0:
@@ -99,8 +118,8 @@ def watch(request):
             request.session['first'] = True
         return redirect('/')
     else:
-        activities = request.session['activities'] 
-        activities.insert(0, "HIT BY PITCH, take your base")
+        at_bat = request.session['at_bat'] 
+        at_bat.insert(0, "HIT BY PITCH, take your base")
         request.session['ball'] = 0
         request.session['strike'] = 0
         if request.session['third'] and request.session['second'] and request.session['third']:
@@ -120,11 +139,11 @@ def swing(request):
     rand = random.randint(0,100)
     if rand < 21:
         request.session['strike'] += 1
-        activities = request.session['activities'] 
-        activities.insert(0, "STRIKE " + str(request.session['strike']) + "!")
+        at_bat = request.session['at_bat'] 
+        at_bat.insert(0, "STRIKE " + str(request.session['strike']) + "!")
         if request.session['strike'] == 3:
-            activities = request.session['activities'] 
-            activities.insert(0, "STRIKE OUT SWINGING!")
+            at_bat = request.session['at_bat'] 
+            at_bat.insert(0, "STRIKE OUT SWINGING!")
             request.session['out'] += 1
             request.session['strike'] = 0
             request.session['ball'] = 0
@@ -132,49 +151,69 @@ def swing(request):
                 end_of_inning(request)
         return redirect('/')
     elif rand > 20 and rand < 71:
-        hit = ['ground out', 'fly out', 'line out', 'foul ball', 'foul ball', 'foul ball', 'foul ball', 'foul ball']
-        x = random.randint(0,7)
+        hit = ['Ground Out!', 'Fly Out!', 'Line Out!', 'Foul Ball!', 'Foul Ball!', 'Foul Ball!']
+        x = random.randint(0,5)
         this_hit = hit[x]
         print this_hit
         i = request.session['curr_inn']
 
-        if this_hit == 'fly out':
+        if this_hit == 'Ground Out!':
+            at_bat = request.session['at_bat'] 
+            at_bat.insert(0, this_hit)
             request.session['out'] += 1
             if request.session['out'] == 3:
                 end_of_inning(request)
-            print request.session['out']
-            if request.session['third']:
-                request.session['box_score'][i] += 1
-            
-            activities = request.session['activities'] 
-            activities.insert(0, this_hit)
-            return redirect('/')
-
-        if this_hit == 'ground out':
-            activities = request.session['activities'] 
-            activities.insert(0, this_hit)
-            request.session['out'] += 1
-            if request.session['out'] == 3:
-                end_of_inning(request)
-            print "OUT: " + str(request.session['out'])
             if request.session['third']:
                 if request.session['out'] < 3:
                     request.session['box_score'][i] += 1
+            request.session['strike'] = 0
+            request.session['ball'] = 0
             return redirect('/')
 
-    elif rand > 70 and rand < 90:
-        hit = ['single', 'double', 'line out', 'foul ball', 'foul ball', 'foul ball', 'foul ball', 'foul ball']
-        x = random.randint(0,7)
-<<<<<<< HEAD
-        this_hit = hit[0]
-=======
+        if this_hit == 'Fly Out!':
+            at_bat = request.session['at_bat'] 
+            at_bat.insert(0, this_hit)
+            request.session['out'] += 1
+            if request.session['out'] == 3:
+                end_of_inning(request)
+            if request.session['third']:
+                if request.session['out'] < 3:
+                    request.session['box_score'][i] += 1
+            request.session['strike'] = 0
+            request.session['ball'] = 0
+            return redirect('/')
+        
+        if this_hit == 'Line Out!':
+            at_bat = request.session['at_bat'] 
+            at_bat.insert(0, this_hit)
+            request.session['out'] += 1
+            if request.session['out'] == 3:
+                end_of_inning(request)
+            if request.session['third']:
+                if request.session['out'] < 3:
+                    request.session['box_score'][i] += 1
+            request.session['strike'] = 0
+            request.session['ball'] = 0
+            return redirect('/')
+
+        if this_hit == 'Foul Ball!':
+            at_bat = request.session['at_bat']
+            at_bat.insert(0, this_hit)
+            print "FOUL BALL*********"
+            if request.session['strike'] < 2:
+                request.session['strike'] += 1
+            return redirect('/')
+            
+
+        
+    elif rand > 70 and rand < 101:
+        hit = ['Single!', 'Double!', 'Triple!', 'Home Run!']
+        x = random.randint(0,3)
         this_hit = hit[x]
->>>>>>> b2a0d5d4106a0f0cc89502895ea0dd2738dc2a44
         print this_hit
         i = request.session['curr_inn']
 
-        if this_hit == 'single':
-            request.session['first'] = True
+        if this_hit == 'Single!':
             if request.session['first']:
                 request.session['second'] = True
             if request.session['third']:
@@ -184,12 +223,12 @@ def swing(request):
                     request.session['visitor_score'] += 1
                 else:
                     request.session['home_score'] += 1
-                    request.session['first'] = False
-            activities = request.session['activities']
-            activities.insert(0, this_hit)
+            request.session['first'] = True
+            at_bat = request.session['at_bat']
+            at_bat.insert(0, this_hit)
             return redirect('/')
 
-        if this_hit == 'double':
+        if this_hit == 'Double!':
             if request.session['first']:
                 request.session['first'] = False
                 request.session['third'] = True
@@ -202,13 +241,18 @@ def swing(request):
                     request.session['first'] = False
             if request.session['third']:
                 request.session['box_score'][i] += 1
+                if request.session['curr_inn'] % 2 == 0:
+                    request.session['visitor_score'] += 1
+                else:
+                    request.session['home_score'] += 1
+                    request.session['first'] = False
                 request.session['third'] = False
             request.session['second'] = True
-            activities = request.session['activities'] 
-            activities.insert(0, this_hit)
+            at_bat = request.session['at_bat'] 
+            at_bat.insert(0, this_hit)
             return redirect('/')
 
-        if this_hit == 'triple':
+        if this_hit == 'Triple!':
             if request.session['first']:
                 request.session['box_score'][i] += 1
                 if request.session['curr_inn'] % 2 == 0:
@@ -233,8 +277,8 @@ def swing(request):
                     request.session['home_score'] += 1
                     request.session['first'] = False
             request.session['third'] = True
-            activities = request.session['activities'] 
-            activities.insert(0, this_hit)
+            at_bat = request.session['at_bat'] 
+            at_bat.insert(0, this_hit)
             return redirect('/')
 
         if this_hit == 'Home Run!':
@@ -273,19 +317,16 @@ def swing(request):
             request.session['ball'] = 0
             request.session['strike'] = 0
 
-            if request.session['curr_inn'] % 2 == 0:
-                request.session['visitor_score'] += 1
-            else:
-                request.session['home_score'] += 1
+            
             
 
-            activities = request.session['activities'] 
-            activities.insert(0, this_hit)
+            at_bat = request.session['at_bat'] 
+            at_bat.insert(0, this_hit)
             return redirect('/')
 
         if this_hit == 'hit by pitch':
-            activities = request.session['activities'] 
-            activities.insert(0, this_hit)
+            at_bat = request.session['at_bat'] 
+            at_bat.insert(0, this_hit)
             request.session['ball'] = 0
             request.session['strike'] = 0
             if request.session['third'] and request.session['second'] and request.session['third']:
@@ -304,8 +345,8 @@ def swing(request):
 
 
 def end_of_inning(request):
-    activities = request.session['activities'] 
-    activities.insert(0, "*******************END OF INNING************************")
+    at_bat = request.session['at_bat'] 
+    at_bat.insert(0, "********END OF INNING******")
     request.session['ball'] = 0
     request.session['strike'] = 0
     request.session['out'] = 0
