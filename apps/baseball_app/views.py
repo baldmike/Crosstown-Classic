@@ -50,8 +50,6 @@ def index(request):
     if request.session['curr_inn'] == 17:
         request.session['inning'] = "Bottom of the ninth"
 
-
-
     if 'ball' not in request.session:
         request.session['ball'] = 0
     if 'strike' not in request.session:
@@ -61,10 +59,6 @@ def index(request):
 
     if 'box_score' not in request.session:
         request.session['box_score'] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-    print"BOX SCORE OF ZERO: " + str(request.session['box_score'][0])
-
-    print "CURRENT INNING: " + str(request.session['curr_inn'])
-
     if 'visitor_score' not in request.session:
         request.session['visitor_score'] = 0
     if 'home_score' not in request.session:
@@ -77,19 +71,23 @@ def index(request):
     if 'third' not in request.session:
         request.session['third'] = False
 
+    print"BOX SCORE OF ZERO: " + str(request.session['box_score'][0])
+    print "CURRENT INNING: " + str(request.session['curr_inn'])
+
     return render(request, 'baseball_app/index.html')
 
 
 def watch(request):
     i = request.session['curr_inn']
     rand = random.randint(1,100)
-    if rand <= 2:
+    print "************************************* RANDOM NUMBER: " + str(rand)
+    if rand <= 60:
         request.session['strike'] += 1
         at_bat = request.session['at_bat'] 
-        at_bat.insert(0, "STRIKE " + str(request.session['strike']))
+        at_bat.insert(0, "Strike " + str(request.session['strike']))
         if request.session['strike'] == 3:
             at_bat = request.session['at_bat'] 
-            at_bat.insert(0, "***** STRIKE OUT!! *****")
+            at_bat.insert(0, "Steeee - rike THREE!!")
             request.session['strike'] = 0
             request.session['ball'] = 0
             request.session['out'] += 1
@@ -97,15 +95,15 @@ def watch(request):
                 at_bat = request.session['at_bat']
                 end_of_inning(request)
         return redirect('/')
-    elif rand > 60 and rand < 95:
+    elif rand > 60 and rand < 98:
         request.session['ball'] += 1
         at_bat = request.session['at_bat'] 
-        at_bat.insert(0, "BALL " + str(request.session['ball']))
+        at_bat.insert(0, "Ball " + str(request.session['ball']))
         if request.session['ball'] == 4:
             request.session['ball'] = 0
             request.session['strike'] = 0
             at_bat = request.session['at_bat'] 
-            at_bat.insert(0, "*****  Ball Four, Take your base. ***** ")
+            at_bat.insert(0, "Ball Four, Take your base.")
             if request.session['third'] and request.session['second'] and request.session['third']:
                 request.session['box_score'][i] += 1
                 if request.session['curr_inn'] % 2 == 0:
@@ -137,20 +135,20 @@ def watch(request):
 
 def swing(request):
     rand = random.randint(0,100)
-    if rand < 21:
+    if rand < 20:
         request.session['strike'] += 1
         at_bat = request.session['at_bat'] 
-        at_bat.insert(0, "STRIKE " + str(request.session['strike']) + "!")
+        at_bat.insert(0, "Strike " + str(request.session['strike']) + "!")
         if request.session['strike'] == 3:
             at_bat = request.session['at_bat'] 
-            at_bat.insert(0, "STRIKE OUT SWINGING!")
+            at_bat.insert(0, "Strike out swinging!")
             request.session['out'] += 1
             request.session['strike'] = 0
             request.session['ball'] = 0
             if request.session['out'] == 3:
                 end_of_inning(request)
         return redirect('/')
-    elif rand > 20 and rand < 71:
+    elif rand >= 20 and rand <76:
         hit = ['Ground Out!', 'Fly Out!', 'Line Out!', 'Foul Ball!', 'Foul Ball!', 'Foul Ball!']
         x = random.randint(0,5)
         this_hit = hit[x]
@@ -206,7 +204,7 @@ def swing(request):
             
 
         
-    elif rand > 70 and rand < 101:
+    elif rand > 75 and rand < 101:
         hit = ['Single!', 'Double!', 'Triple!', 'Home Run!']
         x = random.randint(0,3)
         this_hit = hit[x]
@@ -316,10 +314,7 @@ def swing(request):
                 request.session['first'] = False
             request.session['ball'] = 0
             request.session['strike'] = 0
-
-            
-            
-
+        
             at_bat = request.session['at_bat'] 
             at_bat.insert(0, this_hit)
             return redirect('/')
@@ -345,8 +340,10 @@ def swing(request):
 
 
 def end_of_inning(request):
+    if request.session['curr_inn'] == 17:
+        game_over(request)
     at_bat = request.session['at_bat'] 
-    at_bat.insert(0, "********END OF INNING******")
+    at_bat.insert(0, "END OF INNING")
     request.session['ball'] = 0
     request.session['strike'] = 0
     request.session['out'] = 0
@@ -364,3 +361,7 @@ def reset(request):
     request.session.flush()
 
     return redirect('/')
+
+def game_over(request):
+
+    return render(request, 'baseball_app/game_over.html')
