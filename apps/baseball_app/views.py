@@ -208,7 +208,6 @@ def swing(request):
             return redirect('/')
             
 
-        
     elif rand > 75 and rand < 101:
         hit = ['Single!', 'Double!', 'Triple!', 'Home Run!']
         x = random.randint(0,3)
@@ -338,11 +337,6 @@ def swing(request):
             reset_at_bat(request)
             return redirect('/')
 
-
-# def advance_runners(request):
-#     if 
-
-
 def reset_at_bat(request):
     request.session['ball'] = 0
     request.session['strike'] = 0
@@ -363,7 +357,6 @@ def end_of_inning(request):
     request.session['curr_inn'] += 1
 
     return redirect('/')
-
 
 def reset(request):
     request.session.flush()
