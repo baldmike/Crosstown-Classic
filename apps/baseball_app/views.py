@@ -9,7 +9,7 @@ from models import *
 
 def index(request):
 
-    home_team = Player.objects.get().all()
+    home_team = Player.objects
 
     if 'outcome' not in request.session:
         request.session['outcome'] = ['Play Ball!']
@@ -23,7 +23,7 @@ def index(request):
         request.session['side'] = 'top'
 
     if 'batter' not in request.session:
-        request.session['batter'] = "Batter 1"
+        request.session['batter'] = home_team
         
     if 'inning' not in request.session:
         request.session['inning'] = "Top of the first"
