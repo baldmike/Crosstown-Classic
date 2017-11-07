@@ -50,10 +50,6 @@ h3 {
     overflow: scroll;
 }
 
-.main_box {
-    border: 5px solid black;
-    height: 340px;
-}
 
 .big_box {
     font-size: 12px;
@@ -90,18 +86,13 @@ h3 {
     width: 120px;
     border-radius: 10px;
     font-size: 20px;
-    background-color: blue;
+    font-family: 'Cinzel', serif;
+    background-color: black;
     color: white;
 }
 
-.button2 {
-    margin: 10px;
-    height: 50px;
-    width: 120px;
-    border-radius: 10px;
-    font-size: 20px;
-    background-color: black;
-    color: white;
+.main {
+    height: 250px;
 }
 
 .button_reset {

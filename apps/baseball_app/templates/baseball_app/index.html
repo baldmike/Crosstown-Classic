@@ -8,6 +8,7 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'baseball_app/css/styles.css' %}" media="screen" title="Baseball" charset="UTF-8">
     <link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Cinzel" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"                     integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     <script src="{% static 'baseball_app/baseball_js.js' %}"></script>
 </head>
@@ -49,12 +50,12 @@
                     
                     <form action="/swing" method="post">
                         {% csrf_token %}
-                        <input type="submit" value=" Swing " name = "swing" class="button2">
+                        <input type="submit" value=" Swing " name = "swing" class="button">
                     </form>
                 
                     <form action="watch" method="post">
                         {% csrf_token %}
-                        <input type="submit" value=" Watch " name = "watch" class="button2">
+                        <input type="submit" value=" Watch " name = "watch" class="button">
                     </form>
                 
             </div>
@@ -82,12 +83,9 @@
                 <h4>Out: {{request.session.out}}</h4>
 
             </div>
-
-            
-
         </div>
 
-        
+        <div class="col-md-12"><h4 style= "font-family: 'Cinzel', serif;">Now batting: <span style = "font-family: 'Gloria Hallelujah', cursive;">{{ request.session.batter }}</span> </h4></div>
 
         <div class="scoreboard">
             <table class="col-xs-12 table-bordered">

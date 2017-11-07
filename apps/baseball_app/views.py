@@ -9,6 +9,8 @@ from models import *
 
 def index(request):
 
+    home_team = Player.objects.get().all()
+
     if 'outcome' not in request.session:
         request.session['outcome'] = ['Play Ball!']
     if 'curr_inn' not in request.session:
@@ -19,7 +21,10 @@ def index(request):
         request.session['side'] = 'bottom'
     if request.session['curr_inn'] % 2 != 0:
         request.session['side'] = 'top'
-    
+
+    if 'batter' not in request.session:
+        request.session['batter'] = "Batter 1"
+        
     if 'inning' not in request.session:
         request.session['inning'] = "Top of the first"
     if request.session['curr_inn'] == 1:
