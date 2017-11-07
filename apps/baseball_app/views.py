@@ -13,6 +13,12 @@ def index(request):
         request.session['outcome'] = ['Play Ball!']
     if 'curr_inn' not in request.session:
         request.session['curr_inn'] = 0
+    if 'side' not in request.session:
+        request.session['side'] = 'top'
+    if request.session['curr_inn'] % 2 == 0:
+        request.session['side'] = 'bottom'
+    if request.session['curr_inn'] % 2 != 0:
+        request.session['side'] = 'top'
     
     if 'inning' not in request.session:
         request.session['inning'] = "Top of the first"
@@ -208,9 +214,9 @@ def swing(request):
             return redirect('/')
             
 
-    elif rand > 75 and rand < 101:
-        hit = ['Single!', 'Double!', 'Triple!', 'Home Run!']
-        x = random.randint(0,3)
+    elif rand > 75 and rand < 92:
+        hit = ['Single!', 'Double!']
+        x = random.randint(0,1)
         this_hit = hit[x]
         print this_hit
         i = request.session['curr_inn']
@@ -253,6 +259,14 @@ def swing(request):
             outcome = request.session['outcome'] 
             outcome.insert(0, this_hit)
             return redirect('/')
+
+        elif rand > 91 and rand < 100:
+            hit = ['Triple!', 'Home Run!']
+        x = random.randint(0,1)
+        this_hit = hit[x]
+        print this_hit
+        i = request.session['curr_inn']
+
 
         if this_hit == 'Triple!':
             if request.session['first']:
@@ -319,7 +333,11 @@ def swing(request):
             outcome.insert(0, this_hit)
             return redirect('/')
 
-        if this_hit == 'hit by pitch':
+
+        elif rand > 99 and rand < 101:
+            this_hit = 'Hit By Pitch!'
+            i = request.session['curr_inn']
+        
             outcome = request.session['outcome'] 
             outcome.insert(0, this_hit)
             if request.session['third'] and request.session['second'] and request.session['third']:
