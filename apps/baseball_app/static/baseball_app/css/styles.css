@@ -86,20 +86,20 @@ h3 {
 
 .button {
     margin: 10px;
-    height: 30px;
-    width: 90px;
+    height: 50px;
+    width: 120px;
     border-radius: 10px;
-    font-size: 12px;
+    font-size: 20px;
     background-color: blue;
     color: white;
 }
 
 .button2 {
     margin: 10px;
-    height: 30px;
-    width: 90px;
+    height: 50px;
+    width: 120px;
     border-radius: 10px;
-    font-size: 12px;
+    font-size: 20px;
     background-color: black;
     color: white;
 }
