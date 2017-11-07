@@ -106,7 +106,7 @@ def watch(request):
                 outcome = request.session['outcome']
                 end_of_inning(request)
         return redirect('/')
-    elif rand > 60 and rand < 98:
+    elif rand > 60 and rand < 99:
         request.session['ball'] += 1
         outcome = request.session['outcome'] 
         outcome.insert(0, "Ball " + str(request.session['ball']))
@@ -159,7 +159,7 @@ def swing(request):
             if request.session['out'] == 3:
                 end_of_inning(request)
         return redirect('/')
-    elif rand >= 20 and rand <76:
+    elif rand >= 20 and rand <=75:
         hit = ['Ground Out!', 'Fly Out!', 'Line Out!', 'Foul Ball!', 'Foul Ball!', 'Foul Ball!']
         x = random.randint(0,5)
         this_hit = hit[x]
