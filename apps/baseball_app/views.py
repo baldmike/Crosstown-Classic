@@ -261,7 +261,6 @@ def swing(request):
                     request.session['visitor_score'] += 1
                 else:
                     request.session['home_score'] += 1
-                    request.session['first'] = False
                 request.session['first'] = False
             if request.session['second']:
                 request.session['box_score'][i] += 1
@@ -269,7 +268,7 @@ def swing(request):
                     request.session['visitor_score'] += 1
                 else:
                     request.session['home_score'] += 1
-                    request.session['first'] = False
+                request.session['first'] = False
                 request.session['second'] = False
             if request.session['third']:
                 request.session['box_score'][i] += 1
@@ -277,7 +276,7 @@ def swing(request):
                     request.session['visitor_score'] += 1
                 else:
                     request.session['home_score'] += 1
-                    request.session['first'] = False
+                request.session['first'] = False
             request.session['third'] = True
             outcome = request.session['outcome'] 
             outcome.insert(0, this_hit)
