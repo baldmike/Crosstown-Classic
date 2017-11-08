@@ -6,15 +6,21 @@ from django.core.urlresolvers import reverse
 import random
 
 from models import *
+from players import *
 
 def index(request):
 
-    home_team = Player.objects
+    home_team = Player.objects.filter(team="Home")
+    away_team = Player.objects.filter(team="Away")
+    if 'curr_inn' not in request.session:
+        request.session['curr_inn'] = 0
+    if request.session['curr_inn'] % 2 == 0:
+        team_at_bat = away_team
+    else: team_at_bat = home_team
 
     if 'outcome' not in request.session:
         request.session['outcome'] = ['Play Ball!']
-    if 'curr_inn' not in request.session:
-        request.session['curr_inn'] = 0
+    
     if 'side' not in request.session:
         request.session['side'] = 'top'
     if request.session['curr_inn'] % 2 == 0:
@@ -22,9 +28,15 @@ def index(request):
     if request.session['curr_inn'] % 2 != 0:
         request.session['side'] = 'top'
 
+    if 'order' not in request.session:
+        request.session['order'] = 0
+    
+    x = request.session['order']
+
     if 'batter' not in request.session:
-        request.session['batter'] = home_team
-        
+        print "THIS IS X:***************************" + str(x)
+        request.session['batter'] = team_at_bat[x].first_name + " " + team_at_bat[x].last_name
+    print "THIS IS is is IS IS IS IS IS IS  2 X:***************************" + str(x) + request.session['batter']
     if 'inning' not in request.session:
         request.session['inning'] = "Top of the first"
     if request.session['curr_inn'] == 1:
@@ -150,17 +162,18 @@ def watch(request):
 
 
 def swing(request):
-    rand = random.randint(0,100)
+    rand = random.randint(1,10)
     if rand < 20:
         request.session['strike'] += 1
         outcome = request.session['outcome'] 
         outcome.insert(0, "Strike " + str(request.session['strike']) + "!")
         if request.session['strike'] == 3:
+            
             outcome = request.session['outcome'] 
             outcome.insert(0, "Strike out swinging!")
             request.session['out'] += 1
-            request.session['strike'] = 0
-            request.session['ball'] = 0
+            reset_at_bat(request)
+            
             if request.session['out'] == 3:
                 end_of_inning(request)
         return redirect('/')
@@ -339,7 +352,7 @@ def swing(request):
             return redirect('/')
 
 
-        elif rand > 99 and rand < 101:
+        elif rand == 100:
             this_hit = 'Hit By Pitch!'
             i = request.session['curr_inn']
         
@@ -362,10 +375,31 @@ def swing(request):
 def reset_at_bat(request):
     request.session['ball'] = 0
     request.session['strike'] = 0
+    if request.session['order'] == 8:
+        request.session['order'] = 0
+    request.session['order'] += 1
+    x = request.session['order']
+    home_team = Player.objects.filter(team="Home")
+    away_team = Player.objects.filter(team="Away")
+    
+    if request.session['curr_inn'] % 2 == 0:
+        team_at_bat = away_team
+    else: team_at_bat = home_team
+    request.session['batter'] = team_at_bat[x].first_name + " " + team_at_bat[x].last_name
+    print "This is ORDER: **********" + str(request.session['order'])
 
 def end_of_inning(request):
     if request.session['curr_inn'] == 17:
         game_over(request)
+    x = request.session['order']
+    home_team = Player.objects.filter(team="Home")
+    away_team = Player.objects.filter(team="Away")
+    
+    if request.session['curr_inn'] % 2 == 0:
+        team_at_bat = away_team
+    else: team_at_bat = home_team
+    request.session['batter'] = team_at_bat[x].first_name + " " + team_at_bat[x].last_name
+    print "This is ORDER: **********" + str(request.session['order'])
     outcome = request.session['outcome'] 
     outcome.insert(0, "END OF INNING")
     request.session['ball'] = 0
