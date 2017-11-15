@@ -169,7 +169,7 @@ def watch(request):
 
 
 def swing(request):
-    rand = random.randint(30, 40)
+    rand = random.randint(5, 15)
     if rand < 20:
         request.session['strike'] += 1
         outcome = request.session['outcome'] 
@@ -187,9 +187,9 @@ def swing(request):
     elif rand >= 20 and rand <=75:
         hit = ['Ground Out!', 'Fly Out!', 'Line Out!', 'Foul Ball!', 'Foul Ball!', 'Foul Ball!']
         x = random.randint(0,5)
-        this_hit = hit[x]
+        this_hit = hit[0]
         print this_hit
-        i = request.session['curr_inn']
+        # i = request.session['curr_inn']
 
         if this_hit == 'Ground Out!':
             outcome = request.session['outcome']
@@ -197,6 +197,7 @@ def swing(request):
             request.session['out'] += 1
             if request.session['out'] == 3:
                 end_of_inning(request)
+                # reset_at_bat(request)
             if request.session['third']:
                 if request.session['out'] < 3:
                     request.session['box_score'][i] += 1
@@ -409,8 +410,9 @@ def reset_at_bat(request):
     print request.session['batter'] + "*******************************************************"
 
 def end_of_inning(request):
+    reset_at_bat(request)
     if request.session['curr_inn'] == 17:
-        return render(request, 'baseball_app/game_over')
+        return render(request, 'baseball_app/game_over.html')
     print "THIS IS CURR_INN" + str(request.session['curr_inn'])
     
 
