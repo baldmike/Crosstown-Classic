@@ -102,28 +102,28 @@
                     <tr>
                         <td>Cubs</td>
                         <td {% if request.session.curr_inn == 0 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.0}}</td>
-                        <td {% if request.session.curr_inn == 2 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.2}}</td>
-                        <td {% if request.session.curr_inn == 4 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.4}}</td>
-                        <td {% if request.session.curr_inn == 6 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.6}}</td>
-                        <td {% if request.session.curr_inn == 8 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.8}}</td>
-                        <td {% if request.session.curr_inn == 10 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.10}}</td>
-                        <td {% if request.session.curr_inn == 12 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.12}}</td>
-                        <td {% if request.session.curr_inn == 14 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.14}}</td>
-                        <td {% if request.session.curr_inn == 16 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.16}}</td>
+                        <td {% if request.session.curr_inn == 2 %} style="background: green; font-style:'italic'" {% endif %}>{% if request.session.curr_inn >= 2 %}{{request.session.box_score.2}}{% endif %}</td>
+                        <td {% if request.session.curr_inn == 4 %} style="background: green; font-style:'italic'" {% endif %}>{% if request.session.curr_inn >= 4 %}{{request.session.box_score.4}}{% endif %}</td>
+                        <td {% if request.session.curr_inn == 6 %} style="background: green; font-style:'italic'" {% endif %}>{% if request.session.curr_inn >= 6 %}{{request.session.box_score.6}}{% endif %}</td>
+                        <td {% if request.session.curr_inn == 8 %} style="background: green; font-style:'italic'" {% endif %}>{% if request.session.curr_inn >= 8 %}{{request.session.box_score.8}}{% endif %}</td>
+                        <td {% if request.session.curr_inn == 10 %} style="background: green; font-style:'italic'" {% endif %}>{% if request.session.curr_inn >= 10 %}{{request.session.box_score.10}}{% endif %}</td>
+                        <td {% if request.session.curr_inn == 12 %} style="background: green; font-style:'italic'" {% endif %}>{% if request.session.curr_inn >= 12 %}{{request.session.box_score.12}}{% endif %}</td>
+                        <td {% if request.session.curr_inn == 14 %} style="background: green; font-style:'italic'" {% endif %}>{% if request.session.curr_inn >= 14 %}{{request.session.box_score.14}}{% endif %}</td>
+                        <td {% if request.session.curr_inn == 16 %} style="background: green; font-style:'italic'" {% endif %}>{% if request.session.curr_inn >= 16 %}{{request.session.box_score.16}}{% endif %}</td>
                             
                         <td> {{ request.session.visitor_score }}</td>
                     </tr>
                     <tr>
                         <td>Sox</td>
-                        <td {% if request.session.curr_inn == 1 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.1}}</td>
-                        <td {% if request.session.curr_inn == 3 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.3}}</td>
-                        <td {% if request.session.curr_inn == 5 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.5}}</td>
-                        <td {% if request.session.curr_inn == 7 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.7}}</td>
-                        <td {% if request.session.curr_inn == 9 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.9}}</td>
-                        <td {% if request.session.curr_inn == 11 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.11}}</td>
-                        <td {% if request.session.curr_inn == 13 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.13}}</td>
-                        <td {% if request.session.curr_inn == 15 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.15}}</td>
-                        <td {% if request.session.curr_inn == 17 %} style="background: green; font-style:'italic'" {% endif %}>{{request.session.box_score.17}}</td>
+                        <td {% if request.session.curr_inn == 1 %} style="background: green; font-style:'italic'" {% endif %}>{% if request.session.curr_inn >= 1 %}{{request.session.box_score.1}}{% endif %}</td>
+                        <td {% if request.session.curr_inn == 3 %} style="background: green; font-style:'italic'" {% endif %}>{% if request.session.curr_inn >= 3 %}{{request.session.box_score.3}}{% endif %}</td>
+                        <td {% if request.session.curr_inn == 5 %} style="background: green; font-style:'italic'" {% endif %}>{% if request.session.curr_inn >= 5 %}{{request.session.box_score.5}}{% endif %}</td>
+                        <td {% if request.session.curr_inn == 7 %} style="background: green; font-style:'italic'" {% endif %}>{% if request.session.curr_inn >= 7 %}{{request.session.box_score.7}}{% endif %}</td>
+                        <td {% if request.session.curr_inn == 9 %} style="background: green; font-style:'italic'" {% endif %}>{% if request.session.curr_inn >= 9 %}{{request.session.box_score.9}}{% endif %}</td>
+                        <td {% if request.session.curr_inn == 11 %} style="background: green; font-style:'italic'" {% endif %}>{% if request.session.curr_inn >= 11 %}{{request.session.box_score.11}}{% endif %}</td>
+                        <td {% if request.session.curr_inn == 13 %} style="background: green; font-style:'italic'" {% endif %}>{% if request.session.curr_inn >= 13 %}{{request.session.box_score.13}}{% endif %}</td>
+                        <td {% if request.session.curr_inn == 15 %} style="background: green; font-style:'italic'" {% endif %}>{% if request.session.curr_inn >= 15 %}{{request.session.box_score.15}}{% endif %}</td>
+                        <td {% if request.session.curr_inn == 17 %} style="background: green; font-style:'italic'" {% endif %}>{% if request.session.curr_inn >= 17 %}{{request.session.box_score.17}}{% endif %}</td>
                     
                         <td> {{ request.session.home_score }}</td>
                     </tr>
