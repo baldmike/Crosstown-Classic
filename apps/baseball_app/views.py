@@ -418,13 +418,10 @@ def reset_at_bat(request):
     print request.session['batter'] + "*******************************************************"
 
 def end_of_inning(request):
-    return redirect('/game_over')
     request.session['curr_inn'] += 1
-    print "THIS IS CURR_INN" + str(request.session['curr_inn'])
-
     if request.session['curr_inn'] == 18:
-        return redirect('/game_over')
-
+        return render(request, 'baseball_app/game_over')
+    print "THIS IS CURR_INN" + str(request.session['curr_inn'])
     
 
     home_team = Player.objects.filter(team="Home")
