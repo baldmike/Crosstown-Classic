@@ -114,7 +114,7 @@ def index(request):
 
 def watch(request):
     i = request.session['curr_inn']
-    rand = random.randint(1,100)
+    rand = random.randint(1, 100)
     print "************************************* RANDOM NUMBER: " + str(rand)
     if rand <= 60:
         request.session['strike'] += 1
@@ -135,14 +135,11 @@ def watch(request):
         outcome = request.session['outcome'] 
         outcome.insert(0, "Ball " + str(request.session['ball']))
         if request.session['ball'] == 4:
-            request.session['ball'] = 0
-            request.session['strike'] = 0
+            reset_at_bat(request)
             outcome = request.session['outcome'] 
             outcome.insert(0, "Ball Four, Take your base.")
             if request.session['third'] and request.session['second'] and request.session['third']:
-                request.session['box_score'][i] += 1
-                if request.session['curr_inn'] % 2 == 0:
-                    request.session['visitor_score'] += 1
+                score(request)
                 return redirect('/')
             if request.session['second'] and request.session['first']:
                 request.session['third'] = True
@@ -169,7 +166,7 @@ def watch(request):
 
 
 def swing(request):
-    rand = random.randint(5, 15)
+    rand = random.randint(76, 80)
     if rand < 20:
         request.session['strike'] += 1
         outcome = request.session['outcome'] 
@@ -179,17 +176,18 @@ def swing(request):
             outcome = request.session['outcome'] 
             outcome.insert(0, "Strike out swinging!")
             request.session['out'] += 1
-            reset_at_bat(request)
-            
+                       
             if request.session['out'] == 3:
                 end_of_inning(request)
+
+            reset_at_bat(request)
         return redirect('/')
     elif rand >= 20 and rand <=75:
         hit = ['Ground Out!', 'Fly Out!', 'Line Out!', 'Foul Ball!', 'Foul Ball!', 'Foul Ball!']
         x = random.randint(0,5)
         this_hit = hit[0]
         print this_hit
-        # i = request.session['curr_inn']
+        i = request.session['curr_inn']
 
         if this_hit == 'Ground Out!':
             outcome = request.session['outcome']
@@ -245,40 +243,75 @@ def swing(request):
         i = request.session['curr_inn']
 
         if this_hit == 'Single!':
-            if request.session['first']:
+            if request.session['first'] and request.session['second'] and request.session['third']:
+                score(request)
+
+            if request.session['first'] and request.session['second'] and request.session['third'] == False:   
+                request.session['third'] = True
+
+            if request.session['first'] and request.session['second'] == False and request.session['third']:
                 request.session['second'] = True
-            if request.session['third']:
                 request.session['third'] = False
-                request.session['box_score'][i] += 1
-                if request.session['curr_inn'] % 2 == 0:
-                    request.session['visitor_score'] += 1
-                else:
-                    request.session['home_score'] += 1
+                score(request)
+
+            if request.session['first'] and request.session['second'] == False and request.session['third'] == False:
+                request.session['second'] = True
+
+            if request.session['first'] == False and request.session['second'] == False and request.session['third']:
+                request.session['first'] = True
+                request.session['third'] = False
+                score(request)
+
+            if request.session['first'] == False and request.session['second'] and request.session['third'] == False:
+                request.session['first'] = True
+                request.session['second'] = False
+                request.session['third'] = True
+            
             request.session['first'] = True
+
             outcome = request.session['outcome']
             outcome.insert(0, this_hit)
             reset_at_bat(request)
             return redirect('/')
 
         if this_hit == 'Double!':
-            if request.session['first']:
+            
+            if request.session['first'] and request.session['second'] == False and request.session['third'] == False:
                 request.session['first'] = False
                 request.session['third'] = True
-            if request.session['second']:
-                request.session['box_score'][i] += 1
-                if request.session['curr_inn'] % 2 == 0:
-                    request.session['visitor_score'] += 1
-                else:
-                    request.session['home_score'] += 1
-                    request.session['first'] = False
-            if request.session['third']:
-                request.session['box_score'][i] += 1
-                if request.session['curr_inn'] % 2 == 0:
-                    request.session['visitor_score'] += 1
-                else:
-                    request.session['home_score'] += 1
-                    request.session['first'] = False
+
+            if request.session['first'] == False and request.session['second'] and request.session['third'] == False:
+                request.session['first'] = False
+                request.session['third'] = True
+                score(request)
+
+            if request.session['first'] == False and request.session['second'] == False and request.session['third']:
+                request.session['first'] = False
                 request.session['third'] = False
+                score(request)
+
+            if request.session['first'] and request.session['second'] and request.session['third'] == False:  
+                request.session['first'] = False
+                request.session['third'] = True
+                score(request)
+
+            if request.session['first'] and request.session['second'] == False and request.session['third']:  
+                request.session['first'] = False
+                request.session['third'] = True
+                score(request)
+
+            if request.session['first'] == False and request.session['second'] and request.session['third']:  
+                request.session['first'] = False
+                request.session['third'] = False
+                score(request)
+
+            if request.session['first'] and request.session['second'] and request.session['third']:
+                request.session['first'] = False
+                score(request)
+                score(request)
+
+            
+
             request.session['second'] = True
             outcome = request.session['outcome'] 
             outcome.insert(0, this_hit)
@@ -448,6 +481,14 @@ def reset(request):
     request.session.flush()
 
     return redirect('/')
+
+def score(request):
+    i = request.session['curr_inn']
+    request.session['box_score'][i] += 1
+    if request.session['curr_inn'] % 2 == 0:
+        request.session['visitor_score'] += 1
+    else:
+        request.session['home_score'] += 1
 
 def game_over(request):
     print "this is the GAME OVER FUNCTION"
