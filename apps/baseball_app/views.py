@@ -167,6 +167,7 @@ def watch(request):
 
 def swing(request):
     rand = random.randint(76, 80)
+    i = request.session['curr_inn']
     if rand < 20:
         request.session['strike'] += 1
         outcome = request.session['outcome'] 
@@ -187,8 +188,7 @@ def swing(request):
         x = random.randint(0,5)
         this_hit = hit[0]
         print this_hit
-        i = request.session['curr_inn']
-
+        
         if this_hit == 'Ground Out!':
             outcome = request.session['outcome']
             outcome.insert(0, this_hit)
@@ -240,37 +240,47 @@ def swing(request):
         x = random.randint(0,1)
         this_hit = hit[x]
         print this_hit
-        i = request.session['curr_inn']
 
         if this_hit == 'Single!':
-            if request.session['first'] and request.session['second'] and request.session['third']:
+            on_base = "Runner on first"
+            if request.session['first'] and request.session['second'] == False and request.session['third'] == False:
+                request.session['second'] = True
+                on_base = "Runners on first and second"
+
+            if request.session['first'] == False and request.session['second'] and request.session['third'] == False:
+                request.session['second'] = False
+                request.session['third'] = True
+                on_base = "Runners on first and third"
+            
+            if request.session['first'] == False and request.session['second'] == False and request.session['third']:
+                request.session['third'] = False
                 score(request)
+                on_base = "Run scores!  Runner on first"
 
             if request.session['first'] and request.session['second'] and request.session['third'] == False:   
                 request.session['third'] = True
+                on_base = "Bases loaded!"
+
+            if request.session['first'] and request.session['second'] and request.session['third']:
+                score(request)
+                on_base = "A run scores, bases still loaded!"            
 
             if request.session['first'] and request.session['second'] == False and request.session['third']:
                 request.session['second'] = True
                 request.session['third'] = False
                 score(request)
-
-            if request.session['first'] and request.session['second'] == False and request.session['third'] == False:
-                request.session['second'] = True
-
-            if request.session['first'] == False and request.session['second'] == False and request.session['third']:
-                request.session['first'] = True
-                request.session['third'] = False
-                score(request)
-
-            if request.session['first'] == False and request.session['second'] and request.session['third'] == False:
-                request.session['first'] = True
-                request.session['second'] = False
-                request.session['third'] = True
-            
+                on_base = "One run scores!  Runners on first and second"
+        
             request.session['first'] = True
+            
+
 
             outcome = request.session['outcome']
             outcome.insert(0, this_hit)
+
+            baserunners = request.session['outcome']
+            baserunners.insert(0, on_base)
+
             reset_at_bat(request)
             return redirect('/')
 
@@ -279,42 +289,50 @@ def swing(request):
             if request.session['first'] and request.session['second'] == False and request.session['third'] == False:
                 request.session['first'] = False
                 request.session['third'] = True
+                on_base = "Runners on second and third"
 
             if request.session['first'] == False and request.session['second'] and request.session['third'] == False:
-                request.session['first'] = False
-                request.session['third'] = True
                 score(request)
+                on_base = "Runner on second"
 
             if request.session['first'] == False and request.session['second'] == False and request.session['third']:
-                request.session['first'] = False
                 request.session['third'] = False
                 score(request)
+                on_base = "Runner on second"
 
             if request.session['first'] and request.session['second'] and request.session['third'] == False:  
                 request.session['first'] = False
-                request.session['third'] = True
                 score(request)
+                request.session['third'] = True
+                on_base = "Runners on second and third"
 
             if request.session['first'] and request.session['second'] == False and request.session['third']:  
                 request.session['first'] = False
-                request.session['third'] = True
                 score(request)
+                request.session['third'] = True
+                on_base = "Runners on second and third"
 
             if request.session['first'] == False and request.session['second'] and request.session['third']:  
-                request.session['first'] = False
+                request.session['second'] = False
+                score(request)
                 request.session['third'] = False
                 score(request)
+                on_base = "Runner on second"
 
             if request.session['first'] and request.session['second'] and request.session['third']:
+                score(request)
                 request.session['first'] = False
                 score(request)
-                score(request)
-
-            
+                on_base = "Runners on second and third"
 
             request.session['second'] = True
+            on_base = "Runner on second"
             outcome = request.session['outcome'] 
             outcome.insert(0, this_hit)
+
+            baserunners = request.session['outcome']
+            baserunners.insert(0, on_base)
+
             reset_at_bat(request)
             return redirect('/')
 
@@ -323,33 +341,45 @@ def swing(request):
         x = random.randint(0,1)
         this_hit = hit[x]
         print this_hit
-        i = request.session['curr_inn']
-
 
         if this_hit == 'Triple!':
-            if request.session['first']:
-                request.session['box_score'][i] += 1
-                if request.session['curr_inn'] % 2 == 0:
-                    request.session['visitor_score'] += 1
-                else:
-                    request.session['home_score'] += 1
+            
+            if request.session['first'] and request.session['second'] == False and request.session['third'] == False:
                 request.session['first'] = False
-            if request.session['second']:
-                request.session['box_score'][i] += 1
-                if request.session['curr_inn'] % 2 == 0:
-                    request.session['visitor_score'] += 1
-                else:
-                    request.session['home_score'] += 1
+                score(request)
+                
+            if request.session['first'] == False and request.session['second'] and request.session['third'] == False:
+                request.session['second'] = False
+                score(request)
+
+            if request.session['first'] == False and request.session['second'] == False and request.session['third']:
+                score(request)
+
+            if request.session['first'] and request.session['second'] and request.session['third'] == False:  
                 request.session['first'] = False
                 request.session['second'] = False
-            if request.session['third']:
-                request.session['box_score'][i] += 1
-                if request.session['curr_inn'] % 2 == 0:
-                    request.session['visitor_score'] += 1
-                else:
-                    request.session['home_score'] += 1
+                score(request)
+                score(request)
+
+            if request.session['first'] and request.session['second'] == False and request.session['third']:  
                 request.session['first'] = False
+                score(request)
+                score(request)
+
+            if request.session['first'] == False and request.session['second'] and request.session['third']:  
+                request.session['first'] = False
+                score(request)
+                score(request)
+
+            if request.session['first'] and request.session['second'] and request.session['third']:
+                request.session['first'] = False
+                request.session['second'] = False
+                score(request)
+                score(request)
+                score(request)
+
             request.session['third'] = True
+
             outcome = request.session['outcome'] 
             outcome.insert(0, this_hit)
             return redirect('/')
