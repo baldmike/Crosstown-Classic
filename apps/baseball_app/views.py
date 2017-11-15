@@ -169,7 +169,7 @@ def watch(request):
 
 
 def swing(request):
-    rand = random.randint(1,10)
+    rand = random.randint(30, 40)
     if rand < 20:
         request.session['strike'] += 1
         outcome = request.session['outcome'] 
@@ -200,8 +200,7 @@ def swing(request):
             if request.session['third']:
                 if request.session['out'] < 3:
                     request.session['box_score'][i] += 1
-            request.session['strike'] = 0
-            request.session['ball'] = 0
+            reset_at_bat(request)
             return redirect('/')
 
         if this_hit == 'Fly Out!':
@@ -213,8 +212,7 @@ def swing(request):
             if request.session['third']:
                 if request.session['out'] < 3:
                     request.session['box_score'][i] += 1
-            request.session['strike'] = 0
-            request.session['ball'] = 0
+            reset_at_bat(request)
             return redirect('/')
         
         if this_hit == 'Line Out!':
@@ -226,8 +224,7 @@ def swing(request):
             if request.session['third']:
                 if request.session['out'] < 3:
                     request.session['box_score'][i] += 1
-            request.session['strike'] = 0
-            request.session['ball'] = 0
+            reset_at_bat(request)
             return redirect('/')
 
         if this_hit == 'Foul Ball!':
@@ -259,6 +256,7 @@ def swing(request):
             request.session['first'] = True
             outcome = request.session['outcome']
             outcome.insert(0, this_hit)
+            reset_at_bat(request)
             return redirect('/')
 
         if this_hit == 'Double!':
@@ -283,6 +281,7 @@ def swing(request):
             request.session['second'] = True
             outcome = request.session['outcome'] 
             outcome.insert(0, this_hit)
+            reset_at_bat(request)
             return redirect('/')
 
         elif rand > 91 and rand < 100:
@@ -410,8 +409,7 @@ def reset_at_bat(request):
     print request.session['batter'] + "*******************************************************"
 
 def end_of_inning(request):
-    request.session['curr_inn'] += 1
-    if request.session['curr_inn'] == 18:
+    if request.session['curr_inn'] == 17:
         return render(request, 'baseball_app/game_over')
     print "THIS IS CURR_INN" + str(request.session['curr_inn'])
     
@@ -440,7 +438,7 @@ def end_of_inning(request):
     request.session['second'] = False
     request.session['third'] = False
 
-    
+    request.session['curr_inn'] += 1
 
     return redirect('/')
 
