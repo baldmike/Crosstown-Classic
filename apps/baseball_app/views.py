@@ -380,40 +380,32 @@ def swing(request):
             return redirect('/')
 
 def reset_at_bat(request):
+    print "RESET AT BAT ***********************************"
     home_team = Player.objects.filter(team="Home")
     home_order = request.session['home_order']
     away_team = Player.objects.filter(team="Away")
-    away_order = request.session['away_order']
+    away_order = request.session['away_order']  
 
     if request.session['curr_inn'] % 2 == 0:
         team_at_bat = away_team
-        counter = away_order
-    else: 
-        team_at_bat = home_team
-        counter = home_order
-
-    request.session['ball'] = 0
-    request.session['strike'] = 0
-
-    if team_at_bat == 'away_team':
         if request.session['away_order'] == 8:
             request.session['away_order'] = 0
         else:
             request.session['away_order'] += 1
-    
-    if team_at_bat == 'home_team':
+        counter = request.session['away_order']
+
+    else:
+        team_at_bat = home_team
         if request.session['home_order'] == 8:
             request.session['home_order'] = 0
         else:
             request.session['home_order'] += 1
-    
-    if request.session['curr_inn'] % 2 == 0:
-        team_at_bat = away_team
-        counter = away_order
-    else: 
-        team_at_bat = home_team
-        counter = home_order
-    counter += 1
+        counter = request.session['home_order']
+
+    request.session['ball'] = 0
+    request.session['strike'] = 0
+      
+
     request.session['batter'] = team_at_bat[counter].first_name + " " + team_at_bat[counter].last_name
     print request.session['batter'] + "*******************************************************"
 
