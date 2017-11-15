@@ -10,13 +10,8 @@ from players import *
 
 def index(request):
 
-    home_team = Player.objects.filter(team="Home")
-    away_team = Player.objects.filter(team="Away")
     if 'curr_inn' not in request.session:
         request.session['curr_inn'] = 0
-    if request.session['curr_inn'] % 2 == 0:
-        team_at_bat = away_team
-    else: team_at_bat = home_team
 
     if 'outcome' not in request.session:
         request.session['outcome'] = ['Play Ball!']
@@ -28,15 +23,27 @@ def index(request):
     if request.session['curr_inn'] % 2 != 0:
         request.session['side'] = 'top'
 
-    if 'order' not in request.session:
-        request.session['order'] = 0
+    if 'home_order' not in request.session:
+        request.session['home_order'] = 0
+        
+    if 'away_order' not in request.session:
+        request.session['away_order'] = 0
     
-    x = request.session['order']
+    home_team = Player.objects.filter(team="Home")
+    home_order = request.session['home_order']
+    away_team = Player.objects.filter(team="Away")
+    away_order = request.session['away_order']
+
+    if request.session['curr_inn'] % 2 == 0:
+        team_at_bat = away_team
+        counter = away_order
+    else: 
+        team_at_bat = home_team
+        counter = home_order
 
     if 'batter' not in request.session:
-        print "THIS IS X:***************************" + str(x)
-        request.session['batter'] = team_at_bat[x].first_name + " " + team_at_bat[x].last_name
-    print "THIS IS is is IS IS IS IS IS IS  2 X:***************************" + str(x) + request.session['batter']
+        request.session['batter'] = team_at_bat[counter].first_name + " " + team_at_bat[counter].last_name
+    
     if 'inning' not in request.session:
         request.session['inning'] = "Top of the first"
     if request.session['curr_inn'] == 1:
@@ -373,33 +380,67 @@ def swing(request):
             return redirect('/')
 
 def reset_at_bat(request):
+    home_team = Player.objects.filter(team="Home")
+    home_order = request.session['home_order']
+    away_team = Player.objects.filter(team="Away")
+    away_order = request.session['away_order']
+
+    if request.session['curr_inn'] % 2 == 0:
+        team_at_bat = away_team
+        counter = away_order
+    else: 
+        team_at_bat = home_team
+        counter = home_order
+
     request.session['ball'] = 0
     request.session['strike'] = 0
-    if request.session['order'] == 8:
-        request.session['order'] = 0
-    request.session['order'] += 1
-    x = request.session['order']
-    home_team = Player.objects.filter(team="Home")
-    away_team = Player.objects.filter(team="Away")
+
+    if team_at_bat == 'away_team':
+        if request.session['away_order'] == 8:
+            request.session['away_order'] = 0
+        else:
+            request.session['away_order'] += 1
+    
+    if team_at_bat == 'home_team':
+        if request.session['home_order'] == 8:
+            request.session['home_order'] = 0
+        else:
+            request.session['home_order'] += 1
     
     if request.session['curr_inn'] % 2 == 0:
         team_at_bat = away_team
-    else: team_at_bat = home_team
-    request.session['batter'] = team_at_bat[x].first_name + " " + team_at_bat[x].last_name
-    print "This is ORDER: **********" + str(request.session['order'])
+        counter = away_order
+    else: 
+        team_at_bat = home_team
+        counter = home_order
+    counter += 1
+    request.session['batter'] = team_at_bat[counter].first_name + " " + team_at_bat[counter].last_name
+    print request.session['batter'] + "*******************************************************"
 
 def end_of_inning(request):
-    if request.session['curr_inn'] == 17:
-        game_over(request)
-    x = request.session['order']
-    home_team = Player.objects.filter(team="Home")
-    away_team = Player.objects.filter(team="Away")
+    return redirect('/game_over')
+    request.session['curr_inn'] += 1
+    print "THIS IS CURR_INN" + str(request.session['curr_inn'])
+
+    if request.session['curr_inn'] == 18:
+        return redirect('/game_over')
+
     
+
+    home_team = Player.objects.filter(team="Home")
+    home_order = request.session['home_order']
+    away_team = Player.objects.filter(team="Away")
+    away_order = request.session['away_order']
+
     if request.session['curr_inn'] % 2 == 0:
         team_at_bat = away_team
-    else: team_at_bat = home_team
-    request.session['batter'] = team_at_bat[x].first_name + " " + team_at_bat[x].last_name
-    print "This is ORDER: **********" + str(request.session['order'])
+        counter = away_order
+    else: 
+        team_at_bat = home_team
+        counter = home_order
+
+    request.session['batter'] = team_at_bat[counter].first_name + " " + team_at_bat[counter].last_name
+    
     outcome = request.session['outcome'] 
     outcome.insert(0, "END OF INNING")
     request.session['ball'] = 0
@@ -410,7 +451,7 @@ def end_of_inning(request):
     request.session['second'] = False
     request.session['third'] = False
 
-    request.session['curr_inn'] += 1
+    
 
     return redirect('/')
 
@@ -420,5 +461,9 @@ def reset(request):
     return redirect('/')
 
 def game_over(request):
+    print "this is the GAME OVER FUNCTION"
+    request.session.flush()
 
     return render(request, 'baseball_app/game_over.html')
+
+    
