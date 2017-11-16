@@ -242,12 +242,11 @@ def swing(request):
         print this_hit
 
         if this_hit == 'Single!':
-            on_base = "Runner on first"
             if request.session['first'] and request.session['second'] == False and request.session['third'] == False:
                 request.session['second'] = True
                 on_base = "Runners on first and second"
 
-            if request.session['first'] == False and request.session['second'] and request.session['third'] == False:
+            if request.session['first'] == False and request.session['second'] == True and request.session['third'] == False:
                 request.session['second'] = False
                 request.session['third'] = True
                 on_base = "Runners on first and third"
@@ -326,7 +325,6 @@ def swing(request):
                 on_base = "Runners on second and third"
 
             request.session['second'] = True
-            on_base = "Runner on second"
             outcome = request.session['outcome'] 
             outcome.insert(0, this_hit)
 
