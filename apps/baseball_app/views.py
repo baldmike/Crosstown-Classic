@@ -238,10 +238,17 @@ def swing(request):
     elif rand > 75 and rand < 92:
         hit = ['Single!', 'Double!']
         x = random.randint(0,1)
-        this_hit = hit[x]
+        this_hit = hit[0]
         print this_hit
 
         if this_hit == 'Single!':
+            if request.session['first'] == True and request.session['second'] == True and request.session['third'] == True:
+                score(request)
+                on_base = "A run scores, bases still loaded! BUT WE DON'T KNOW WHY" 
+
+            if request.session['first'] == False and request.session['second'] == False and request.session['third'] == False:
+                on_base = "Runner on first"
+
             if request.session['first'] and request.session['second'] == False and request.session['third'] == False:
                 request.session['second'] = True
                 on_base = "Runners on first and second"
@@ -262,7 +269,7 @@ def swing(request):
 
             if request.session['first'] and request.session['second'] and request.session['third']:
                 score(request)
-                on_base = "A run scores, bases still loaded!"            
+                on_base = "A run scores, bases still loaded! BUT WE DON'T KNOW WHY"            
 
             if request.session['first'] and request.session['second'] == False and request.session['third']:
                 request.session['second'] = True
@@ -284,6 +291,9 @@ def swing(request):
             return redirect('/')
 
         if this_hit == 'Double!':
+            
+            if request.session['first'] == False and request.session['second'] == False and request.session['third'] == False:
+                on_base = " "
             
             if request.session['first'] and request.session['second'] == False and request.session['third'] == False:
                 request.session['first'] = False
