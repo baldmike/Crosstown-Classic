@@ -35,23 +35,18 @@
         <div class="main col-md-12">
 
             {% if request.session.side == 'bottom' %}
-            <div class = "col-md-3 side-box">
+            <div class = "col-md-2 side-boxL">
             
                     <form action="/swing" method="post">
                         {% csrf_token %}
                         <input type="submit" value=" Pitch " name = "swing" class="button">
-                    </form>
-                
-                    <h4>Ball: {{request.session.ball}}</h4>
-                    <h4>Strike: {{request.session.strike}}</h4>
-                    <h4>Out: {{request.session.out}}</h4>
-                    
+                    </form>                
 
             </div>
             {% endif %}
 
             {% if request.session.side == 'top' %}
-            <div class = "col-md-3 side-box">
+            <div class = "col-md-2 side-boxL">
                     
                     <form action="/swing" method="post">
                         {% csrf_token %}
@@ -62,16 +57,12 @@
                         {% csrf_token %}
                         <input type="submit" value=" Watch " name = "watch" class="button">
                     </form>
-
-                    <h4>Ball: {{request.session.ball}}</h4>
-                    <h4>Strike: {{request.session.strike}}</h4>
-                    <h4>Out: {{request.session.out}}</h4>
                 
             </div>
             {% endif %}
 
 
-            <div class="col-sm-6 field">
+            <div class="col-sm-8 field">
 
                 <img {% if request.session.first == False and request.session.second == False and request.session.third == False %} style = "border: 1px solid black; border-radius: 40px;" src= "{% static 'images/baseball_diamond.jpeg' %}" width = 50% {% endif %}>
                 <img {% if request.session.first and request.session.second == False and request.session.third == False %} style = "border: 1px solid black; border-radius: 40px;" src= "{% static 'images/baseball_diamond_first.jpeg' %}" width = 50% {% endif %}>
@@ -83,11 +74,12 @@
                 <img {% if request.session.first and request.session.second and request.session.third %} style = "border: 1px solid black; border-radius: 40px;" src= "{% static 'images/baseball_diamond_bases_loaded.jpeg' %}" width = 50% {% endif %}>
 
             </div>
-            <div class="col-md-3 side-box1">
+            <div class="col-md-2 side-boxR">
 
-                <br><br><br>
-                <span class="outcome">{{ request.session.outcome.1 }}</span>
-            
+                <h4 class="cinzel-font">Ball: {{request.session.ball}}</h4>
+                <h4 class="cinzel-font">Strike: {{request.session.strike}}</h4>
+                <h4 class="cinzel-font">Out: {{request.session.out}}</h4>
+
             </div>
         </div>
 

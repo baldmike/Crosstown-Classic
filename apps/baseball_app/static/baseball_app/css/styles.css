@@ -72,13 +72,14 @@ h3 {
     height: 80px;
 }
 
-.side-box {
+.side-boxL {
     padding: 90px;
 }
 
-.side-box1 {
-    float: left;
-    padding-right: 80px;
+.side-boxR {
+    font-family: 'Cinzel', serif;
+    margin-top: 90px;
+    margin-left: -70px;
 }
 
 .button {
