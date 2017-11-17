@@ -243,8 +243,6 @@ def swing(request):
         print this_hit
 
         if this_hit == 'Single!':
-<<<<<<< HEAD
-=======
             
             if request.session['first'] == False and request.session['second'] == False and request.session['third'] == False:
                 request.session['first'] = True
@@ -252,16 +250,12 @@ def swing(request):
                 finish_at_bat(request, on_base, this_hit)
                 return redirect('/')
 
->>>>>>> b828fc88b72183bf80cb3bb906cc4bf48ec348c0
             if request.session['first'] and request.session['second'] == False and request.session['third'] == False:
                 request.session['second'] = True
                 on_base = "Runners on first and second"
                 finish_at_bat(request, on_base, this_hit)
                 return redirect('/')
 
-<<<<<<< HEAD
-            if request.session['first'] == False and request.session['second'] == True and request.session['third'] == False:
-=======
             if  request.session['first'] and request.session['second'] and request.session['third'] == False:   
                 request.session['third'] = True
                 on_base = "Bases loaded!"
@@ -270,7 +264,6 @@ def swing(request):
                 
             if request.session['first'] == False and request.session['second'] and request.session['third'] == False:
                 request.session['first'] = True
->>>>>>> b828fc88b72183bf80cb3bb906cc4bf48ec348c0
                 request.session['second'] = False
                 request.session['third'] = True
                 on_base = "Runners on first and third"
