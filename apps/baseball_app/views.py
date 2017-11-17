@@ -6,7 +6,6 @@ from django.core.urlresolvers import reverse
 import random
 
 from models import *
-from players import *
 
 def index(request):
 
@@ -166,7 +165,8 @@ def watch(request):
 
 
 def swing(request):
-    rand = random.randint(1, 100)
+    rand = random.randint(80, 98)
+    print "********** RANDOM NUMBER: " + str(rand)
     i = request.session['curr_inn']
     if rand < 20:
         request.session['strike'] += 1
@@ -245,24 +245,21 @@ def swing(request):
         if this_hit == 'Single!':
             
             if request.session['first'] == False and request.session['second'] == False and request.session['third'] == False:
+                # BASES EMPTY
                 request.session['first'] = True
                 on_base = "Runner on first"
                 finish_at_bat(request, on_base, this_hit)
                 return redirect('/')
 
             if request.session['first'] and request.session['second'] == False and request.session['third'] == False:
+                # MAN ON FIRST
                 request.session['second'] = True
                 on_base = "Runners on first and second"
                 finish_at_bat(request, on_base, this_hit)
                 return redirect('/')
-
-            if  request.session['first'] and request.session['second'] and request.session['third'] == False:   
-                request.session['third'] = True
-                on_base = "Bases loaded!"
-                finish_at_bat(request, on_base, this_hit)
-                return redirect('/')
-                
+            
             if request.session['first'] == False and request.session['second'] and request.session['third'] == False:
+                # MAN ON SECOND
                 request.session['first'] = True
                 request.session['second'] = False
                 request.session['third'] = True
@@ -270,45 +267,58 @@ def swing(request):
                 finish_at_bat(request, on_base, this_hit)
                 return redirect('/')
 
-            if request.session['first'] == False and request.session['second'] and request.session['third']:
-                request.session['first'] = True
-                request.session['second'] = False
-                request.session['third'] = True
-                on_base = "Runners on first and third"
-                finish_at_bat(request, on_base, this_hit)
-                return redirect('/')
-                
             if request.session['first'] == False and request.session['second'] == False and request.session['third']:
+                #MAN ON THIRD
                 request.session['first'] = True
                 request.session['third'] = False
                 score(request)
                 on_base = "Run scores!  Runner on first"
                 finish_at_bat(request, on_base, this_hit)
                 return redirect('/')
-                
+            
+            if  request.session['first'] and request.session['second'] and request.session['third'] == False:
+                # FIRST AND SECOND
+                request.session['third'] = True
+                on_base = "Bases loaded!"
+                finish_at_bat(request, on_base, this_hit)
+                return redirect('/')
+                        
             if request.session['first'] and request.session['second'] == False and request.session['third']:
+                # FIRST AND THIRD
                 request.session['second'] = True
                 request.session['third'] = False
                 score(request)
                 on_base = "One run scores!  Runners on first and second"
                 finish_at_bat(request, on_base, this_hit)
                 return redirect('/')
+            
+            if request.session['first'] == False and request.session['second'] and request.session['third']:
+                # SECOND AND THIRD
+                request.session['first'] = True
+                request.session['second'] = False
+                request.session['third'] = True
+                on_base = "Runners on first and third"
+                finish_at_bat(request, on_base, this_hit)
+                return redirect('/')
                 
             if request.session['first'] and request.session['second'] and request.session['third']:
+                # BASES LOADED
                 score(request)
-                on_base = "A run scores, bases still loaded!"
+                on_base = "A run scores, bags still packed!"
                 finish_at_bat(request, on_base, this_hit)
                 return redirect('/')
 
         if this_hit == 'Double!':
             
             if request.session['first'] == False and request.session['second'] == False and request.session['third'] == False:
+                # BASES EMPTY
                 request.session['second'] = True
                 on_base = "Runner on second"
                 finish_at_bat(request, on_base, this_hit)
                 return redirect('/')
                 
             if request.session['first'] and request.session['second'] == False and request.session['third'] == False:
+                # MAN ON FIRST
                 request.session['first'] = False
                 request.session['second'] = True
                 request.session['third'] = True
@@ -317,78 +327,81 @@ def swing(request):
                 return redirect('/')
                 
             if request.session['first'] == False and request.session['second'] and request.session['third'] == False:
+                # MAN ON SECOND
                 score(request)
-                on_base = "Runner on second"
+                request.session['second'] = True
+                on_base = "The runner scores, man on second"
                 finish_at_bat(request, on_base, this_hit)
                 return redirect('/')
                 
             if request.session['first'] == False and request.session['second'] == False and request.session['third']:
+                # MAN ON THIRD
                 request.session['third'] = False
+                request.session['second'] = True
                 score(request)
-                on_base = "Runner on second"
+                on_base = "One run in, runner on second"
                 finish_at_bat(request, on_base, this_hit)
                 return redirect('/')
                 
-            if request.session['first'] and request.session['second'] and request.session['third'] == False:  
+            if request.session['first'] and request.session['second'] and request.session['third'] == False:
+                # FIRST AND SECOND
                 request.session['first'] = False
+                request.session['second'] = True
                 score(request)
                 request.session['third'] = True
-                on_base = "Runners on second and third"
+                on_base = "A run scores - runners on second and third"
                 finish_at_bat(request, on_base, this_hit)
                 return redirect('/')
                 
-            if request.session['first'] and request.session['second'] == False and request.session['third']:  
+            if request.session['first'] and request.session['second'] == False and request.session['third']:
+                # FIRST AND THIRD
                 request.session['first'] = False
                 request.session['second'] = True
                 request.session['third'] = True
                 score(request)
-                on_base = "Runners on second and third"
+                on_base = "One run scores, runners on second and third."
                 finish_at_bat(request, on_base, this_hit)
                 return redirect('/')
                 
-            if request.session['first'] == False and request.session['second'] and request.session['third']:  
+            if request.session['first'] == False and request.session['second'] and request.session['third']:
+                # SECOND AND THIRD
+                request.session['second'] = True
                 request.session['third'] = False
                 score(request)
                 score(request)
-                on_base = "Runner on second"
+                on_base = "Both runners score! Runner on second"
                 finish_at_bat(request, on_base, this_hit)
                 return redirect('/')
                 
             if request.session['first'] and request.session['second'] and request.session['third']:
+                # BASES LOADED
                 request.session['first'] = False
+                request.session['second'] = True
                 score(request)
                 score(request)
-                on_base = "Runners on second and third"
-<<<<<<< HEAD
-
-            request.session['second'] = True
-            outcome = request.session['outcome'] 
-            outcome.insert(0, this_hit)
-
-            baserunners = request.session['outcome']
-            baserunners.insert(0, on_base)
-
-            reset_at_bat(request)
-            return redirect('/')
-=======
+                on_base = "Two runs score! Runners on second and third"
                 finish_at_bat(request, on_base, this_hit)
                 return redirect('/')
             
->>>>>>> b828fc88b72183bf80cb3bb906cc4bf48ec348c0
 
-        elif rand > 91 and rand < 100:
-            hit = ['Triple!', 'Home Run!']
+    elif rand > 91 and rand < 100:
+        hit = ['Triple!', 'Home Run!']
         x = random.randint(0,1)
-        this_hit = hit[0]
+        this_hit = hit[1]
         print this_hit
 
         if this_hit == 'Triple!':
-            
+            if request.session['first'] == False and request.session['second'] == False and request.session['third'] == False:
+                request.session['third'] = True
+                on_base = "Runner on Third."
+                finish_at_bat(request, on_base, this_hit)
+                return redirect('/')
+
             if request.session['first'] and request.session['second'] == False and request.session['third'] == False:
                 request.session['first'] = False
                 request.session['third'] = True
                 score(request)
-                on_base = "Runner on Third"
+                on_base = "The runner scores! Man on third."
                 finish_at_bat(request, on_base, this_hit)
                 return redirect('/')
                 
@@ -396,13 +409,13 @@ def swing(request):
                 request.session['second'] = False
                 request.session['third'] = True
                 score(request)
-                on_base = "Runner on Third"
+                on_base = "One run scores, runner on Third."
                 finish_at_bat(request, on_base, this_hit)
                 return redirect('/')
 
             if request.session['first'] == False and request.session['second'] == False and request.session['third']:
                 score(request)
-                on_base = "Runner on Third"
+                on_base = "One run in, runner on Third!"
                 finish_at_bat(request, on_base, this_hit)
                 return redirect('/')
 
@@ -412,7 +425,7 @@ def swing(request):
                 request.session['third'] = True
                 score(request)
                 score(request)
-                on_base = "Runner on Third"
+                on_base = "Two runs score, man on third."
                 finish_at_bat(request, on_base, this_hit)
                 return redirect('/')
 
@@ -420,7 +433,7 @@ def swing(request):
                 request.session['first'] = False
                 score(request)
                 score(request)
-                on_base = "Runner on Third"
+                on_base = "The two runners score, man on third"
                 finish_at_bat(request, on_base, this_hit)
                 return redirect('/')
 
@@ -428,7 +441,7 @@ def swing(request):
                 request.session['first'] = False
                 score(request)
                 score(request)
-                on_base = "Runner on Third"
+                on_base = "Two runs in, runner on third."
                 finish_at_bat(request, on_base, this_hit)
                 return redirect('/')
 
@@ -438,48 +451,92 @@ def swing(request):
                 score(request)
                 score(request)
                 score(request)
-                on_base = "Runner on Third"
+                on_base = "He clears the bags and lands on third"
                 finish_at_bat(request, on_base, this_hit)
                 return redirect('/')
 
             
 
         if this_hit == 'Home Run!':
-            if request.session['first']:
-                request.session['box_score'][i] += 1
-                if request.session['curr_inn'] % 2 == 0:
-                    request.session['visitor_score'] += 1
-                else:
-                    request.session['home_score'] += 1
+            if request.session['first'] == False and request.session['second'] == False and request.session['third'] == False:
+                # BASES EMPTY
+                score(request)
+                on_base = "Solo shot onto the Dan Ryan!"
+                finish_at_bat(request, on_base, this_hit)
+                return redirect('/')
+                
+            if request.session['first'] and request.session['second'] == False and request.session['third'] == False:
+                # MAN ON FIRST
                 request.session['first'] = False
-            
-            if request.session['second']:
-                request.session['box_score'][i] += 1
-                if request.session['curr_inn'] % 2 == 0:
-                    request.session['visitor_score'] += 1
-                else:
-                    request.session['home_score'] += 1
+                score(request)
+                score(request)
+                on_base = "You can put it on the board....  YES! Two run ding dong!"
+                finish_at_bat(request, on_base, this_hit)
+                return redirect('/')
+                
+            if request.session['first'] == False and request.session['second'] and request.session['third'] == False:
+                # MAN ON SECOND
                 request.session['second'] = False
-            
-            if request.session['third']:
-                request.session['box_score'][i] += 1
-                if request.session['curr_inn'] % 2 == 0:
-                    request.session['visitor_score'] += 1
-                else:
-                    request.session['home_score'] += 1
+                score(request)
+                score(request)
+                on_base = "He goes yard! It's a two run shot!"
+                finish_at_bat(request, on_base, this_hit)
+                return redirect('/')
+                
+            if request.session['first'] == False and request.session['second'] == False and request.session['third']:
+                # MAN ON THIRD
                 request.session['third'] = False
-            
-            request.session['box_score'][i] += 1
-            if request.session['curr_inn'] % 2 == 0:
-                    request.session['visitor_score'] += 1
-            else:
-                request.session['home_score'] += 1
-            reset_at_bat(request)
-            
-        
-            outcome = request.session['outcome'] 
-            outcome.insert(0, this_hit)
-            return redirect('/')
+                score(request)
+                score(request)
+                on_base = "He goes yard! It's a two run shot!"
+                finish_at_bat(request, on_base, this_hit)
+                return redirect('/')
+                
+            if request.session['first'] and request.session['second'] and request.session['third'] == False:
+                # FIRST AND SECOND
+                request.session['first'] = False
+                request.session['second'] = False
+                score(request)
+                score(request)
+                score(request)
+                on_base = "That ball's on 35th!  A 3 run shot!"
+                finish_at_bat(request, on_base, this_hit)
+                return redirect('/')
+                
+            if request.session['first'] and request.session['second'] == False and request.session['third']:
+                # FIRST AND THIRD
+                request.session['first'] = False
+                request.session['third'] = False
+                score(request)
+                score(request)
+                score(request)
+                on_base = "It's OUTTA HERE!!  A 3 run shot!"
+                finish_at_bat(request, on_base, this_hit)
+                return redirect('/')
+                
+            if request.session['first'] == False and request.session['second'] and request.session['third']:
+                # SECOND AND THIRD
+                request.session['second'] = False
+                request.session['third'] = False
+                score(request)
+                score(request)
+                score(request)
+                on_base = "It's OUTTA HERE!!  A 3 run shot!"
+                finish_at_bat(request, on_base, this_hit)
+                return redirect('/')
+                
+            if request.session['first'] and request.session['second'] and request.session['third']:
+                # BASES LOADED
+                request.session['first'] = False
+                request.session['second'] = False
+                request.session['third'] = False
+                score(request)
+                score(request)
+                score(request)
+                score(request)
+                on_base = "GRAND SLAM!!!"
+                finish_at_bat(request, on_base, this_hit)
+                return redirect('/')
 
 
         elif rand == 100:
