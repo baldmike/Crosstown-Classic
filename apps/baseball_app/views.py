@@ -166,7 +166,7 @@ def watch(request):
 
 
 def swing(request):
-    rand = random.randint(76, 80)
+    rand = random.randint(1, 100)
     i = request.session['curr_inn']
     if rand < 20:
         request.session['strike'] += 1
@@ -366,37 +366,58 @@ def swing(request):
         elif rand > 91 and rand < 100:
             hit = ['Triple!', 'Home Run!']
         x = random.randint(0,1)
-        this_hit = hit[x]
+        this_hit = hit[0]
         print this_hit
 
         if this_hit == 'Triple!':
             
             if request.session['first'] and request.session['second'] == False and request.session['third'] == False:
                 request.session['first'] = False
+                request.session['third'] = True
                 score(request)
+                on_base = "Runner on Third"
+                finish_at_bat(request, on_base, this_hit)
+                return redirect('/')
                 
             if request.session['first'] == False and request.session['second'] and request.session['third'] == False:
                 request.session['second'] = False
+                request.session['third'] = True
                 score(request)
+                on_base = "Runner on Third"
+                finish_at_bat(request, on_base, this_hit)
+                return redirect('/')
 
             if request.session['first'] == False and request.session['second'] == False and request.session['third']:
                 score(request)
+                on_base = "Runner on Third"
+                finish_at_bat(request, on_base, this_hit)
+                return redirect('/')
 
             if request.session['first'] and request.session['second'] and request.session['third'] == False:  
                 request.session['first'] = False
                 request.session['second'] = False
+                request.session['third'] = True
                 score(request)
                 score(request)
+                on_base = "Runner on Third"
+                finish_at_bat(request, on_base, this_hit)
+                return redirect('/')
 
             if request.session['first'] and request.session['second'] == False and request.session['third']:  
                 request.session['first'] = False
                 score(request)
                 score(request)
+                on_base = "Runner on Third"
+                finish_at_bat(request, on_base, this_hit)
+                return redirect('/')
 
             if request.session['first'] == False and request.session['second'] and request.session['third']:  
                 request.session['first'] = False
                 score(request)
                 score(request)
+                on_base = "Runner on Third"
+                finish_at_bat(request, on_base, this_hit)
+                return redirect('/')
 
             if request.session['first'] and request.session['second'] and request.session['third']:
                 request.session['first'] = False
@@ -404,12 +425,11 @@ def swing(request):
                 score(request)
                 score(request)
                 score(request)
+                on_base = "Runner on Third"
+                finish_at_bat(request, on_base, this_hit)
+                return redirect('/')
 
-            request.session['third'] = True
-
-            outcome = request.session['outcome'] 
-            outcome.insert(0, this_hit)
-            return redirect('/')
+            
 
         if this_hit == 'Home Run!':
             if request.session['first']:
