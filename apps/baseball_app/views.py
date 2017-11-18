@@ -165,7 +165,7 @@ def watch(request):
 
 
 def swing(request):
-    rand = random.randint(1,100)
+    rand = random.randint(40,60)
     print "********** RANDOM NUMBER: " + str(rand)
     i = request.session['curr_inn']
     
@@ -189,7 +189,7 @@ def swing(request):
     elif rand >= 20 and rand <=75:
         hit = ['Ground Out!', 'Fly Out!', 'Line Out!', 'Foul Ball!']
         x = random.randint(0,3)
-        this_hit = hit[x]
+        this_hit = hit[0]
         print this_hit
         
         if this_hit == 'Ground Out!':
@@ -567,6 +567,8 @@ def swing(request):
         return redirect('/')
 
 def reset_at_bat(request):
+    if request.session['curr_inn'] == 17:
+        return render (request, 'baseball_app/game_over.html')
     print "RESET AT BAT ***********************************"
     home_team = Player.objects.filter(team="Home")
     home_order = request.session['home_order']
@@ -600,10 +602,12 @@ def reset_at_bat(request):
 def end_of_inning(request):
     
     if request.session['curr_inn'] == 17:
+        print "THIS SHOULD HIT AT END OF 9th"
         return render(request, 'baseball_app/game_over.html')
-    reset_at_bat(request)
-    print "THIS IS CURR_INN" + str(request.session['curr_inn'])
+        print "THIS IS THE LINE AFTER RETURN RENDER &&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%"
     
+    print "THIS IS CURR_INN" + str(request.session['curr_inn'])
+    reset_at_bat(request)
 
     home_team = Player.objects.filter(team="Home")
     home_order = request.session['home_order']
