@@ -165,7 +165,7 @@ def watch(request):
 
 
 def swing(request):
-    rand = random.randint(40,60)
+    rand = random.randint(80,85)
     print "********** RANDOM NUMBER: " + str(rand)
     i = request.session['curr_inn']
     
@@ -239,8 +239,8 @@ def swing(request):
 
         hit = ['Single!', 'Double!']
         x = random.randint(0,1)
-        this_hit = hit[x]
-        print this_hit
+        this_hit = hit[0]
+        print"this_hit is a: " + this_hit
 
         if this_hit == 'Single!':
             
@@ -248,6 +248,7 @@ def swing(request):
                 # BASES EMPTY
                 request.session['first'] = True
                 on_base = "Runner on first"
+                print "after on_base"
                 finish_at_bat(request, on_base, this_hit)
                 return redirect('/')
 
@@ -256,7 +257,7 @@ def swing(request):
                 request.session['second'] = True
                 on_base = "Runners on first and second"
                 finish_at_bat(request, on_base, this_hit)
-                return redirect('/')
+                # return redirect('/')
             
             if request.session['first'] == False and request.session['second'] and request.session['third'] == False:
                 # MAN ON SECOND
@@ -306,6 +307,7 @@ def swing(request):
                 score(request)
                 on_base = "A run scores, bags still packed!"
                 finish_at_bat(request, on_base, this_hit)
+                print "BASES LOADED SINGLE, AFTER finish_at_bat THIS IS LINE 309"
                 return redirect('/')
 
         if this_hit == 'Double!':
@@ -643,6 +645,7 @@ def reset(request):
     return redirect('/')
 
 def finish_at_bat(request, on_base, this_hit):
+    print "This is finish_at_bat line 647-_-_-_-_-_-_-_-_-_-_-__-"
     outcome = request.session['outcome'] 
     outcome.insert(0, this_hit)
 
