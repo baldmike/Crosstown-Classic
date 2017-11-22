@@ -183,7 +183,6 @@ def swing(request):
                        
             if request.session['out'] == 3:
                 if request.session['curr_inn'] == 17:
-                    print "THIS SHOULD HIT AT END OF 9th **************************&&&&&&&&&&&&&&&&&&&&"
                     return redirect('/game_over')
                 end_of_inning(request)
 
@@ -203,7 +202,6 @@ def swing(request):
             request.session['out'] += 1
             if request.session['out'] == 3:
                 if request.session['curr_inn'] == 17:
-                    print "THIS SHOULD HIT AT END OF 9th **************************&&&&&&&&&&&&&&&&&&&&"
                     return redirect('/game_over')
                 end_of_inning(request)
             
@@ -216,7 +214,6 @@ def swing(request):
             request.session['out'] += 1
             if request.session['out'] == 3:
                 if request.session['curr_inn'] == 17:
-                    print "THIS SHOULD HIT AT END OF 9th **************************&&&&&&&&&&&&&&&&&&&&"
                     return redirect('/game_over')
                 end_of_inning(request)
             if request.session['first'] == False and request.session['second'] == False and request.session['third']:
@@ -231,7 +228,6 @@ def swing(request):
             request.session['out'] += 1
             if request.session['out'] == 3:
                 if request.session['curr_inn'] == 17:
-                    print "THIS SHOULD HIT AT END OF 9th **************************&&&&&&&&&&&&&&&&&&&&"
                     return redirect('/game_over')
                 end_of_inning(request)
             if request.session['third']:
@@ -650,7 +646,6 @@ def reset(request):
     return redirect('/')
 
 def finish_at_bat(request, on_base, this_hit):
-    print "This is finish_at_bat line 647-_-_-_-_-_-_-_-_-_-_-__-"
     outcome = request.session['outcome'] 
     outcome.insert(0, this_hit)
 
