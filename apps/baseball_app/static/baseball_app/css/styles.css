@@ -7,7 +7,12 @@
 }
 
 .win {
-    background-image: url(/Users/BaldMike/Desktop/Dojo_Python_2.7_Django_1.1/Crosstown-Classic/apps/baseball_app/static/images/scoreboard.jpg)
+    padding-top: 200px;
+    height: 500px;
+    color: white;
+    background-color: black;
+    background-image: url(/images/scoreboard.jpg);
+    background-attachment: fixed;
 }
 
 table {
