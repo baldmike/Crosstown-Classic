@@ -6,6 +6,10 @@
     font-family: 'Gloria Hallelujah', cursive;
 }
 
+.win {
+    background-image: url(/Users/BaldMike/Desktop/Dojo_Python_2.7_Django_1.1/Crosstown-Classic/apps/baseball_app/static/images/scoreboard.jpg)
+}
+
 table {
     font-size: 20px;
     border: 2px black solid;

@@ -167,11 +167,7 @@ def watch(request):
 
 
 def swing(request):
-<<<<<<< HEAD
     rand = random.randint(1,100)
-=======
-    rand = random.randint(80,85)
->>>>>>> ca49ed1462b96cf98dd6b8da99ea6da301a60671
     print "********** RANDOM NUMBER: " + str(rand)
     i = request.session['curr_inn']
     
