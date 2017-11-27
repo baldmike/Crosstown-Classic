@@ -13,7 +13,7 @@ def index(request):
         request.session['curr_inn'] = 0
 
     if 'outcome' not in request.session:
-        request.session['outcome'] = ['Here we go, folks!', 'Play Ball!']
+        request.session['outcome'] = ['It\'s a beautiful 82 degrees and the sun is shining!', 'Here we go, folks, Play Ball!']
         
     if 'side' not in request.session:
         request.session['side'] = 'top'
