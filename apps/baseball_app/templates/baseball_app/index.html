@@ -18,7 +18,7 @@
     <div class="container">
 
         <div class="col-xs-12 inning_box">
-            <div class = "col-xs-4">
+            <div class = "col-md-4 col-xs-12">
                 <h3 class = headline><img src="{% static 'images/cubs_logo.jpeg' %}" width="60"> Cubs: {{request.session.visitor_score}}</h3>
             </div>
             
@@ -35,7 +35,7 @@
         <div class="main col-md-12">
 
             {% if request.session.side == 'bottom' %}
-            <div class = "col-md-2 side-boxL">
+            <div class = "col-xs-12 col-md-2 side-boxL">
             
                     <form action="/swing" method="post">
                         {% csrf_token %}
@@ -46,7 +46,7 @@
             {% endif %}
 
             {% if request.session.side == 'top' %}
-            <div class = "col-md-2 side-boxL">
+            <div class = "col-xs-12 col-md-2 side-boxL">
                     
                     <form action="/swing" method="post">
                         {% csrf_token %}
@@ -62,7 +62,7 @@
             {% endif %}
 
 
-            <div class="col-sm-8 field">
+            <div class="col-md-8 col-xs-12 field">
 
                 <img {% if request.session.first == False and request.session.second == False and request.session.third == False %} style = "border: 1px solid black; border-radius: 40px;" src= "{% static 'images/baseball_diamond.jpeg' %}" width = 50% {% endif %}>
                 <img {% if request.session.first and request.session.second == False and request.session.third == False %} style = "border: 1px solid black; border-radius: 40px;" src= "{% static 'images/baseball_diamond_first.jpeg' %}" width = 50% {% endif %}>
@@ -74,7 +74,7 @@
                 <img {% if request.session.first and request.session.second and request.session.third %} style = "border: 1px solid black; border-radius: 40px;" src= "{% static 'images/baseball_diamond_bases_loaded.jpeg' %}" width = 50% {% endif %}>
 
             </div>
-            <div class="col-md-2 side-boxR">
+            <div class="col-md-2 col-xs-12 side-boxR">
 
                 <h4 class="cinzel-font">Ball: {{request.session.ball}}</h4>
                 <h4 class="cinzel-font">Strike: {{request.session.strike}}</h4>
@@ -83,7 +83,7 @@
             </div>
         </div>
 
-        <div class="col-md-12"><h4 style= "font-family: 'Cinzel', serif;">Now batting: <span style = "font-family: 'Gloria Hallelujah', cursive;">{{ request.session.batter }}</span> </h4></div>
+        <div class="col-xs-12"><h4 style= "font-family: 'Cinzel', serif;">Now batting: <span style = "font-family: 'Gloria Hallelujah', cursive;">{{ request.session.batter }}</span> </h4></div>
 
         <div class="scoreboard">
             <table class="col-xs-12 table-bordered">

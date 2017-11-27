@@ -37,14 +37,6 @@ h3 {
     margin-top: 20px;
 }
 
-.jumbotron {
-    border: 2px solid black;
-    background-image: -webkit-gradient(linear, left top, left bottom, from(darkgray), to(white));
-    background-image: -webkit-linear-gradient(top, darkgray, white);
-    background-image: -moz-linear-gradient(top, darkgray, white);
-    background-image: linear-gradient(to bottom, darkgray, white);
-}
-
 .box {
     font-size: 10px;
     height: 100px;
@@ -59,7 +51,6 @@ h3 {
     overflow: scroll;
 }
 
-
 .big_box {
     font-size: 12px;
     margin-top: 20px;
@@ -70,26 +61,36 @@ h3 {
     background-color: white;
 }
 
-.inning_box {
-    margin: 10px;
-    margin-left: 0px;
-    border: 1px solid black;
-    border-radius: 20px;
-    background: black;
-    font-size: 40px;
-    color: white;
-    height: 80px;
+@media (min-width: 600px) {
+
+    .inning_box {
+        margin: 10px;
+        margin-left: 0px;
+        border: 1px solid black;
+        border-radius: 20px;
+        background: black;
+        font-size: 40px;
+        color: white;
+        height: 80px;
+    }
 }
 
-.side-boxL {
-    padding: 90px;
+@media (min-width: 300) {
+
+    .side-boxR {
+        font-family: 'Cinzel', serif;
+        margin-top: 90px;
+        margin-left: -70px;
+    }    
+    
 }
 
-.side-boxR {
-    font-family: 'Cinzel', serif;
-    margin-top: 90px;
-    margin-left: -70px;
+@media (min-width: 300) {
+    .side-boxL {
+        padding: 90px;
+    }
 }
+
 
 .button {
     margin: 10px;
