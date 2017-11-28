@@ -249,7 +249,7 @@ def swing(request):
 
         hit = ['Single!', 'Double!']
         x = random.randint(0,1)
-        this_hit = hit[0]
+        this_hit = hit[x]
         print"this_hit is a: " + this_hit
 
         if this_hit == 'Single!':
@@ -267,7 +267,7 @@ def swing(request):
                 request.session['second'] = True
                 on_base = "Runners on first and second"
                 finish_at_bat(request, on_base, this_hit)
-                # return redirect('/')
+                return redirect('/')
             
             if request.session['first'] == False and request.session['second'] and request.session['third'] == False:
                 # MAN ON SECOND
