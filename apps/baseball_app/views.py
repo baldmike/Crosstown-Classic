@@ -199,6 +199,11 @@ def swing(request):
         if this_hit == 'Ground Out!':
             outcome = request.session['outcome']
             outcome.insert(0, this_hit)
+            if request.session['first'] == True:
+                if request.session['out'] < 2:
+                    outcome.insert(0, '6-4-3 Double Play!!')
+                    request.session['first'] = False
+                    request.session['out'] += 1
             request.session['out'] += 1
             if request.session['out'] == 3:
                 if request.session['curr_inn'] == 17:
