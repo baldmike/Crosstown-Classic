@@ -250,7 +250,6 @@ def swing(request):
         hit = ['Single!', 'Double!']
         x = random.randint(0,1)
         this_hit = hit[x]
-        print"this_hit is a: " + this_hit
 
         if this_hit == 'Single!':
             
@@ -400,7 +399,6 @@ def swing(request):
         hit = ['Triple!', 'Home Run!']
         x = random.randint(0,1)
         this_hit = hit[1]
-        print this_hit
 
         if this_hit == 'Triple!':
             if request.session['first'] == False and request.session['second'] == False and request.session['third'] == False:
